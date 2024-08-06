@@ -26,8 +26,9 @@ class ProductCard extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 2,
-                  child: AspectRatio(aspectRatio: 18.0/11.0, child: Image.asset(image)),
+                  child: Opacity(opacity:0.8, child: AspectRatio(aspectRatio: 18.0/11.0, child: Image.asset(image, fit: BoxFit.cover,))),
                 ),
+                const SizedBox(height: 7,),
                 Flexible(
                   flex: 1,
                   child: Column(
@@ -38,7 +39,7 @@ class ProductCard extends StatelessWidget {
                         style:const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),
-                      const Spacer(),
+                      const SizedBox(height: 2,),
                       Text('\$$price')
                     ],
                   ),
