@@ -9,13 +9,13 @@ This Flutter-based e-commerce app allows users to create, view, update, and dele
 - **Smooth Transitions:** Custom page transition animations have been implemented to enhance the user experience by providing smooth and visually appealing transitions between screens.
 
 ## Screenshots
-![Home Screen](assets\home_page.png)
+![Home Screen](assets/home_page.png)
 
-![Product Details](assets\details.png)
+![Product Details](assets/details.png)
 
-![Add Product](assets\add.png)
+![Add Product](assets/add.png)
 
-![Search Product](assets\search.png)
+![Search Product](assets/search.png)
 
 
 <!-- <img src="mobile\simon\ecommerce\assets\home_page.png"> -->
