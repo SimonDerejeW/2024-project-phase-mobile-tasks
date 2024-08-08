@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:ecommerce/data/mockshoeData.dart';
 import 'package:ecommerce/models/shoe.dart';
 import 'package:ecommerce/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProductPage extends StatefulWidget {
   final bool isAdd;
@@ -17,11 +20,14 @@ class _AddProductPageState extends State<AddProductPage> {
   late TextEditingController priceController;
   late TextEditingController descriptionController;
   late TextEditingController typeController;
+  File? _image;
+
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    
+
     if (widget.isAdd) {
       nameController = TextEditingController();
       priceController = TextEditingController();
@@ -38,9 +44,39 @@ class _AddProductPageState extends State<AddProductPage> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path); // Store the selected image in _image
+      });
+    }
+  }
+
   void addShoe() {
+    if (_image == null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: const Text("Please select an image"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
     mockData.add(Shoe(
-        image: 'assets/cowboy-boots.jpg',
+        image: _image!.path,
         name: nameController.text,
         price: double.parse(priceController.text),
         type: typeController.text,
@@ -116,24 +152,38 @@ class _AddProductPageState extends State<AddProductPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
+                GestureDetector(
+                  onTap:
+                      _pickImage, // Call the _pickImage method when the container is tapped
+                  child: Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
                       color: Color.fromRGBO(243, 243, 243, 1),
-                      borderRadius: BorderRadius.circular(8)),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image_outlined,
-                        size: 40,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text("Upload Image")
-                    ],
+                      borderRadius: BorderRadius.circular(8),
+                      image:
+                          _image != null // Show the picked image if available
+                              ? DecorationImage(
+                                  image: FileImage(_image!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                    ),
+                    child: _image == null
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.image_outlined,
+                                size: 40,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("Upload Image"),
+                            ],
+                          )
+                        : null,
                   ),
                 ),
                 const SizedBox(

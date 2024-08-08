@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecommerce/models/shoe.dart';
 import 'package:ecommerce/pages/shoe_details_page.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ class ShoeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isFile = File(shoe.image).existsSync();
     return Card(
         clipBehavior: Clip.hardEdge,
         child: InkWell(
@@ -37,7 +40,7 @@ class ShoeCard extends StatelessWidget {
                       width: double.infinity,
                       child: Opacity(
                         opacity: 0.8,
-                        child: Image.asset(
+                        child: isFile ? Image.file(File(shoe.image),fit: BoxFit.cover,) : Image.asset(
                           shoe.image,
                           fit: BoxFit.cover,
                         ),

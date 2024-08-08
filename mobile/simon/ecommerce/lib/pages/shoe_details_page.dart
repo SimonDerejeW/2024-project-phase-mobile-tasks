@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecommerce/data/mockSizeData.dart';
 import 'package:ecommerce/data/mockshoeData.dart';
 import 'package:ecommerce/models/shoe.dart';
@@ -26,6 +28,8 @@ class ShoeDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isFile = File(shoe.image).existsSync();
+
     return Scaffold(
       // appBar: AppBar(),
       backgroundColor: Color.fromRGBO(254, 254, 254, 1),
@@ -34,12 +38,19 @@ class ShoeDetailsPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Stack(children: [
-              Image.asset(
-                shoe.image,
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.32,
-                fit: BoxFit.cover,
-              ),
+              isFile
+                  ? Image.file(
+                      File(shoe.image),
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.32,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      shoe.image,
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.32,
+                      fit: BoxFit.cover,
+                    ),
               Positioned(
                 top: 40,
                 left: 10,
