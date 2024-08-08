@@ -1,4 +1,5 @@
 import 'package:ecommerce/data/mockSizeData.dart';
+import 'package:ecommerce/data/mockshoeData.dart';
 import 'package:ecommerce/models/shoe.dart';
 import 'package:ecommerce/widgets/chips.dart';
 import 'package:ecommerce/widgets/custom_outlined_button.dart';
@@ -6,9 +7,24 @@ import 'package:flutter/material.dart';
 
 class ShoeDetailsPage extends StatelessWidget {
   final Shoe shoe;
-  ShoeDetailsPage(
-      {super.key, required this.shoe,
-});
+  ShoeDetailsPage({
+    super.key,
+    required this.shoe,
+  });
+
+  void deleteShoe(BuildContext context) {
+    bool status = mockData.remove(shoe);
+    if (status) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Successfully deleted product")));
+      Navigator.of(context).pushNamed('/');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Failed to delete the product")));
+    }
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +101,8 @@ class ShoeDetailsPage extends StatelessWidget {
                     children: [
                       Text(
                         shoe.name,
-                        style:
-                            TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
                       ),
                       Text(
                         '\$${shoe.price}',
@@ -146,7 +162,7 @@ class ShoeDetailsPage extends StatelessWidget {
                           buttonWidth: 120,
                           buttonHeight: 45,
                           buttonText: "DELETE",
-                          onPressed: () {}),
+                          onPressed: () => deleteShoe(context)),
                       CustomOutlinedButton(
                           backgroundColor: Theme.of(context).primaryColor,
                           foregroundColor: Colors.white,
@@ -154,7 +170,9 @@ class ShoeDetailsPage extends StatelessWidget {
                           buttonWidth: 120,
                           buttonHeight: 45,
                           buttonText: "UPDATE",
-                          onPressed: () {})
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/update');
+                          })
                     ],
                   )
                 ],

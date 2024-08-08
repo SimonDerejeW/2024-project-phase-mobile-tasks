@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 class Shoe {
   final String image;
   final String name;
@@ -14,4 +16,29 @@ class Shoe {
       required this.rating,
       required this.size,
       required this.description});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Shoe &&
+        other.image == image &&
+        other.name == name &&
+        other.price == price &&
+        other.type == type &&
+        other.rating == rating &&
+        ListEquality().equals(other.size, size) &&
+        other.description == description;
+  }
+
+  @override
+  int get hashCode {
+    return image.hashCode ^
+        name.hashCode ^
+        price.hashCode ^
+        type.hashCode ^
+        rating.hashCode ^
+        size.hashCode ^
+        description.hashCode;
+  }
 }
