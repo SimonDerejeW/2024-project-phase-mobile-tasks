@@ -24,8 +24,6 @@ class ShoeDetailsPage extends StatelessWidget {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,7 +169,15 @@ class ShoeDetailsPage extends StatelessWidget {
                           buttonHeight: 45,
                           buttonText: "UPDATE",
                           onPressed: () {
-                            Navigator.of(context).pushNamed('/update');
+                            Navigator.of(context).pushNamed('/update',
+                                arguments: Shoe(
+                                    image: shoe.image,
+                                    name: shoe.name,
+                                    price: shoe.price,
+                                    type: shoe.type,
+                                    rating: shoe.rating,
+                                    size: shoe.size,
+                                    description: shoe.description));
                           })
                     ],
                   )

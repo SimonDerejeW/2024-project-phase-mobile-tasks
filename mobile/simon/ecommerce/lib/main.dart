@@ -26,7 +26,8 @@ class MyApp extends StatelessWidget {
           case '/add':
             return _createRoute(const AddProductPage(isAdd: true,));
           case '/update':
-            return _createRoute(const AddProductPage(isAdd: false,));
+            final args = settings.arguments as Shoe;
+            return _createRoute(AddProductPage(isAdd: false,shoe: args,));
           case '/details':
             final args = settings.arguments as Shoe;
             return _createRoute(ShoeDetailsPage(shoe: args,));

@@ -5,17 +5,38 @@ import 'package:flutter/material.dart';
 
 class AddProductPage extends StatefulWidget {
   final bool isAdd;
-  const AddProductPage({super.key, required this.isAdd});
+  final Shoe? shoe;
+  const AddProductPage({super.key, required this.isAdd, this.shoe});
 
   @override
   State<AddProductPage> createState() => _AddProductPageState();
 }
 
 class _AddProductPageState extends State<AddProductPage> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
-  TextEditingController typeController = TextEditingController();
+  late TextEditingController nameController;
+  late TextEditingController priceController;
+  late TextEditingController descriptionController;
+  late TextEditingController typeController;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    if (widget.isAdd) {
+      nameController = TextEditingController();
+      priceController = TextEditingController();
+      descriptionController = TextEditingController();
+      typeController = TextEditingController();
+    } else {
+      
+      nameController = TextEditingController(text: widget.shoe?.name ?? '');
+      priceController =
+          TextEditingController(text: widget.shoe?.price.toString() ?? '');
+      descriptionController =
+          TextEditingController(text: widget.shoe?.description ?? '');
+      typeController = TextEditingController(text: widget.shoe?.type ?? '');
+    }
+  }
 
   void addShoe() {
     mockData.add(Shoe(
@@ -42,6 +63,43 @@ class _AddProductPageState extends State<AddProductPage> {
             ],
           );
         });
+  }
+
+  void updateShoe(Shoe shoe) {
+    int index = mockData.indexOf(shoe);
+    if (index != -1) {
+      mockData[index] = Shoe(
+          image: shoe.image,
+          name: nameController.text,
+          price: double.parse(priceController.text),
+          type: typeController.text,
+          rating: shoe.rating,
+          size: shoe.size,
+          description: descriptionController.text);
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const Text(
+                  "Successfully updated your product! Go to home page to see your changes"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/');
+                    },
+                    child: const Text("Go to home page"))
+              ],
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialog(
+              content: const Text("Failed to update product"),
+            );
+          });
+    }
   }
 
   @override
@@ -149,13 +207,18 @@ class _AddProductPageState extends State<AddProductPage> {
                   height: 20,
                 ),
                 CustomOutlinedButton(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Colors.white,
-                    borderColor: Theme.of(context).primaryColor,
-                    buttonWidth: double.maxFinite,
-                    buttonHeight: 45,
-                    buttonText: widget.isAdd ? "ADD" : "UPDATE",
-                    onPressed: addShoe),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Colors.white,
+                  borderColor: Theme.of(context).primaryColor,
+                  buttonWidth: double.maxFinite,
+                  buttonHeight: 45,
+                  buttonText: widget.isAdd ? "ADD" : "UPDATE",
+                  onPressed: widget.isAdd
+                      ? addShoe
+                      : widget.shoe != null
+                          ? () => updateShoe(widget.shoe!)
+                          : () {},
+                ),
                 const SizedBox(
                   height: 15,
                 ),
