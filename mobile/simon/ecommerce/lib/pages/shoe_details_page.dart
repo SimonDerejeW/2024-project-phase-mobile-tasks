@@ -1,13 +1,14 @@
-import 'package:ecommerce/data/mockSizeData.dart';
-import 'package:ecommerce/data/mockshoeData.dart';
-import 'package:ecommerce/models/shoe.dart';
-import 'package:ecommerce/widgets/chips.dart';
-import 'package:ecommerce/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
+
+import '../data/mock_shoe_data.dart';
+import '../data/mock_size_data.dart';
+import '../models/shoe.dart';
+import '../widgets/chips.dart';
+import '../widgets/custom_outlined_button.dart';
 
 class ShoeDetailsPage extends StatelessWidget {
   final Shoe shoe;
-  ShoeDetailsPage({
+  const ShoeDetailsPage({
     super.key,
     required this.shoe,
   });
@@ -16,11 +17,11 @@ class ShoeDetailsPage extends StatelessWidget {
     bool status = mockData.remove(shoe);
     if (status) {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Successfully deleted product")));
+          const SnackBar(content: const Text('Successfully deleted product')));
       Navigator.of(context).pushNamed('/');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Failed to delete the product")));
+          const SnackBar(content: Text('Failed to delete the product')));
     }
   }
 
@@ -28,7 +29,7 @@ class ShoeDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(),
-      backgroundColor: Color.fromRGBO(254, 254, 254, 1),
+      backgroundColor: const Color.fromRGBO(254, 254, 254, 1),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -64,7 +65,7 @@ class ShoeDetailsPage extends StatelessWidget {
               ),
             ]),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +76,7 @@ class ShoeDetailsPage extends StatelessWidget {
                     children: [
                       Text(
                         shoe.type,
-                        style: TextStyle(color: Colors.black45),
+                        style: const TextStyle(color: Colors.black45),
                       ),
                       Row(
                         children: [
@@ -84,8 +85,8 @@ class ShoeDetailsPage extends StatelessWidget {
                             color: Colors.amber[400],
                           ),
                           Text(
-                            "(${shoe.rating})",
-                            style: TextStyle(color: Colors.black45),
+                            '(${shoe.rating})',
+                            style: const TextStyle(color: Colors.black45),
                           )
                         ],
                       )
@@ -99,20 +100,20 @@ class ShoeDetailsPage extends StatelessWidget {
                     children: [
                       Text(
                         shoe.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 20),
                       ),
                       Text(
                         '\$${shoe.price}',
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
                       )
                     ],
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    "Size:",
+                  const Text(
+                    'Size:',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                   const SizedBox(
@@ -155,11 +156,11 @@ class ShoeDetailsPage extends StatelessWidget {
                     children: [
                       CustomOutlinedButton(
                           backgroundColor: Colors.white,
-                          foregroundColor: Color.fromRGBO(255, 19, 19, 0.79),
-                          borderColor: Color.fromRGBO(255, 19, 19, 0.79),
+                          foregroundColor: const Color.fromRGBO(255, 19, 19, 0.79),
+                          borderColor: const Color.fromRGBO(255, 19, 19, 0.79),
                           buttonWidth: 120,
                           buttonHeight: 45,
-                          buttonText: "DELETE",
+                          buttonText: 'DELETE',
                           onPressed: () => deleteShoe(context)),
                       CustomOutlinedButton(
                           backgroundColor: Theme.of(context).primaryColor,
@@ -167,7 +168,7 @@ class ShoeDetailsPage extends StatelessWidget {
                           borderColor: Theme.of(context).primaryColor,
                           buttonWidth: 120,
                           buttonHeight: 45,
-                          buttonText: "UPDATE",
+                          buttonText: 'UPDATE',
                           onPressed: () {
                             Navigator.of(context).pushNamed('/update',
                                 arguments: Shoe(

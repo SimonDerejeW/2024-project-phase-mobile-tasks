@@ -1,6 +1,6 @@
-import 'package:ecommerce/models/shoe.dart';
-import 'package:ecommerce/pages/shoe_details_page.dart';
 import 'package:flutter/material.dart';
+import '../models/shoe.dart';
+
 
 class ShoeCard extends StatelessWidget {
   final Shoe shoe;
@@ -46,7 +46,7 @@ class ShoeCard extends StatelessWidget {
                 Flexible(
                     flex: 1,
                     child: Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -55,12 +55,12 @@ class ShoeCard extends StatelessWidget {
                             children: [
                               Text(
                                 shoe.name,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 20),
                               ),
                               Text(
                                 '\$${shoe.price}',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                style: const TextStyle(fontWeight: FontWeight.w500),
                               )
                             ],
                           ),
@@ -69,7 +69,7 @@ class ShoeCard extends StatelessWidget {
                             children: [
                               Text(
                                 shoe.type,
-                                style: TextStyle(color: Colors.black45),
+                                style: const TextStyle(color: Colors.black45),
                               ),
                               Row(
                                 children: [
@@ -79,7 +79,7 @@ class ShoeCard extends StatelessWidget {
                                   ),
                                   Text(
                                     "(${shoe.rating})",
-                                    style: TextStyle(color: Colors.black45),
+                                    style: const TextStyle(color: Colors.black45),
                                   )
                                 ],
                               )

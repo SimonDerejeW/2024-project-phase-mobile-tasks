@@ -1,5 +1,5 @@
-import 'package:ecommerce/widgets/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
+import 'custom_outlined_button.dart';
 
 class ModalSheet extends StatelessWidget {
   const ModalSheet({super.key});
@@ -14,11 +14,11 @@ class ModalSheet extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Category"),
-            SizedBox(
+            const Text('Category'),
+            const SizedBox(
               height: 8,
             ),
-            SizedBox(
+            const SizedBox(
               height: 45,
               child: TextField(
                 decoration: InputDecoration(
@@ -29,10 +29,10 @@ class ModalSheet extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
-            Text("Price"),
+            const Text('Price'),
             RangeSlider(
                 activeColor: Theme.of(context).primaryColor,
-                values: RangeValues(0.2, 0.8),
+                values: const RangeValues(0.2, 0.8),
                 onChanged: (RangeValues rv) {}),
             const SizedBox(
               height: 50,
@@ -43,7 +43,7 @@ class ModalSheet extends StatelessWidget {
                 borderColor: Theme.of(context).primaryColor,
                 buttonWidth: double.maxFinite,
                 buttonHeight: 45,
-                buttonText: "APPLY",
+                buttonText: 'APPLY',
                 onPressed: () {}),
           ],
         ),

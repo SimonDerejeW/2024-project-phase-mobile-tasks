@@ -1,20 +1,20 @@
-import 'package:ecommerce/data/mockshoeData.dart';
-import 'package:ecommerce/models/shoe.dart';
-import 'package:ecommerce/widgets/modal_sheet.dart';
-import 'package:ecommerce/widgets/shoe_card.dart';
 import 'package:flutter/material.dart';
+import '../data/mock_shoe_data.dart';
+import '../models/shoe.dart';
+import '../widgets/modal_sheet.dart';
+import '../widgets/shoe_card.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
 
   void showModal(BuildContext context) {
     showModalBottomSheet<void>(
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.zero
         ),
         context: context,
         builder: (BuildContext context) {
-          return ModalSheet();
+          return const ModalSheet();
         });
   }
 
@@ -22,7 +22,7 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Search Product"),
+        title: const Text('Search Product'),
         centerTitle: true,
       ),
       body: Padding(
@@ -40,13 +40,13 @@ class SearchPage extends StatelessWidget {
                   height: 44,
                   child: TextField(
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(top: 5, left: 15),
+                        contentPadding: const EdgeInsets.only(top: 5, left: 15),
                         suffixIcon: Icon(
                           Icons.arrow_forward,
                           color: Theme.of(context).primaryColor,
                         ),
-                        hintText: "Leather",
-                        border: OutlineInputBorder(
+                        hintText: 'Leather',
+                        border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.black12))),
                   ),
                 ),
@@ -62,8 +62,8 @@ class SearchPage extends StatelessWidget {
                             width: 2, color: Theme.of(context).primaryColor),
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Icon(
                           Icons.filter_list,
                           color: Colors.white,

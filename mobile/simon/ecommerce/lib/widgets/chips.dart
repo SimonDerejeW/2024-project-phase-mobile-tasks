@@ -11,7 +11,7 @@ class Chips extends StatelessWidget {
       backgroundColor: selected ?  Theme.of(context).primaryColor : Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       label: Text(
-        "$number",
+        '$number',
         style: TextStyle(fontWeight: FontWeight.bold, color: selected ? Colors.white : Colors.black),
       ),
       elevation: 2,

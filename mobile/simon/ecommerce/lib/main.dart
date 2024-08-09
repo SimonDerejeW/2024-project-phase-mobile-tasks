@@ -1,10 +1,10 @@
-import 'package:ecommerce/models/shoe.dart';
-import 'package:ecommerce/pages/add_product_page.dart';
-import 'package:ecommerce/pages/home_page.dart';
-import 'package:ecommerce/pages/search_page.dart';
-import 'package:ecommerce/pages/shoe_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'models/shoe.dart';
+import 'pages/add_product_page.dart';
+import 'pages/home_page.dart';
+import 'pages/search_page.dart';
+import 'pages/shoe_details_page.dart';
 
 void main() {
   runApp(const MyApp());

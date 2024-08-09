@@ -28,6 +28,6 @@ class CustomOutlinedButton extends StatelessWidget {
                             width: 1 
                           )
                         ),
-                        child: Text(buttonText, style: TextStyle(fontWeight: FontWeight.w600),));
+                        child: Text(buttonText, style: const TextStyle(fontWeight: FontWeight.w600),));
   }
 }

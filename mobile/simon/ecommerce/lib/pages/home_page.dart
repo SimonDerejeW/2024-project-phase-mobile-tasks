@@ -1,8 +1,7 @@
-import 'package:ecommerce/data/mockshoeData.dart';
-import 'package:ecommerce/models/shoe.dart';
-import 'package:ecommerce/widgets/shoe_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import '../data/mock_shoe_data.dart';
+import '../models/shoe.dart';
+import '../widgets/shoe_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,18 +13,18 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pushNamed('/add');
         },
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Colors.white,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
       ),
       appBar: AppBar(
         leadingWidth: 70,
         // toolbarHeight: 80,
         leading: Padding(
-          padding: EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.only(left: 20),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(9),
             child: Image.asset(
@@ -42,7 +41,7 @@ class HomePage extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 5.0),
               child: Text(
-                "Aug 7, 2024",
+                'Aug 7, 2024',
                 style: TextStyle(
                     fontWeight: FontWeight.w300,
                     color: Colors.black45,
@@ -55,11 +54,11 @@ class HomePage extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "Hello, ",
+                  'Hello, ',
                   style: TextStyle(color: Colors.black45, fontSize: 15),
                 ),
                 Text(
-                  "Amelia",
+                  'Amelia',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
                 )
               ],
@@ -78,7 +77,7 @@ class HomePage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Stack(children: [
-                      Icon(Icons.notifications_none_rounded),
+                      const Icon(Icons.notifications_none_rounded),
                       Positioned(
                           top: 3,
                           right: 5,
@@ -87,24 +86,24 @@ class HomePage extends StatelessWidget {
                             height: 6,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: Color.fromARGB(255, 63, 81, 243)),
+                                color: const Color.fromARGB(255, 63, 81, 243)),
                           ))
                     ]),
                   ))),
-          SizedBox(
+          const SizedBox(
             width: 15,
           )
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 20),
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 20),
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Available Products",
+                const Text(
+                  'Available Products',
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                 ),
                 Container(

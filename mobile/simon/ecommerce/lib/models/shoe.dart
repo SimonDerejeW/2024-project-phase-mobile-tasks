@@ -27,7 +27,7 @@ class Shoe {
         other.price == price &&
         other.type == type &&
         other.rating == rating &&
-        ListEquality().equals(other.size, size) &&
+        const ListEquality().equals(other.size, size) &&
         other.description == description;
   }
 
