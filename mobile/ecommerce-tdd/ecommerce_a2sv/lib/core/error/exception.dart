@@ -11,3 +11,11 @@ abstract class Exception extends Equatable {
 class JsonParsingException extends Exception {
   const JsonParsingException(String message) : super(message);
 }
+
+class ServerException extends Exception {
+  ServerException(super.message);
+}
+
+class CacheException extends Exception {
+  CacheException(super.message);
+}
