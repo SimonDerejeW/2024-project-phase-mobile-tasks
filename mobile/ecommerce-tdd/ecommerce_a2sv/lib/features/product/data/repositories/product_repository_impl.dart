@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../core/error/exception.dart';
 import '../../../../core/error/failure.dart';
@@ -60,6 +61,12 @@ class ProductRepositoryImpl extends ProductRepository {
     if (await networkInfo.isConnected) {
       try {
         final result = await remoteDataSource.getAllProducts();
+        try {
+          await localDataSource.cacheAllProducts(result);
+        } on CacheException {
+          debugPrint('Caching All Product Error');
+        }
+
         return Right(ProductModel.toEntityList(result));
       } on ServerException {
         return const Left(ServerFailure('An error has occurred'));
@@ -68,7 +75,12 @@ class ProductRepositoryImpl extends ProductRepository {
             ConnectionFailure('Failed to connect to the internet'));
       }
     } else {
-      return const Left(ConnectionFailure('Failed to connect to the internet'));
+      try {
+        final result = await localDataSource.getAllProducts();
+        return Right(ProductModel.toEntityList(result));
+      } on CacheException {
+        return const Left(CacheFailure('Failed to load cache'));
+      }
     }
   }
 
