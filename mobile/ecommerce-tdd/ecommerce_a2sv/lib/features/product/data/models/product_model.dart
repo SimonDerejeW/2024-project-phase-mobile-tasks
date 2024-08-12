@@ -28,6 +28,15 @@ class ProductModel extends Product {
       throw JsonParsingException();
     }
   }
+  static List<ProductModel> fromJsonList(List<dynamic> jsonList) {
+    try {
+      return jsonList
+          .map((json) => ProductModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw JsonParsingException();
+    }
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -37,6 +46,10 @@ class ProductModel extends Product {
       'imageUrl': imageUrl,
       'price': price,
     };
+  }
+
+  static List<Map<String, dynamic>> toJsonList(List<ProductModel> products) {
+    return products.map((product) => product.toJson()).toList();
   }
 
   Product toEntity() => Product(

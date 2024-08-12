@@ -5,6 +5,7 @@ import 'package:ecommerce_a2sv/features/product/domain/repositories/product_repo
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mockito/annotations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @GenerateMocks(
   [
@@ -12,7 +13,8 @@ import 'package:mockito/annotations.dart';
     ProductRemoteDataSource,
     ProductLocalDataSource,
     NetworkInfo,
-    InternetConnectionChecker
+    InternetConnectionChecker,
+    SharedPreferences
   ],
   customMocks: [MockSpec<http.Client>(as: #MockHttpClient)]
 )

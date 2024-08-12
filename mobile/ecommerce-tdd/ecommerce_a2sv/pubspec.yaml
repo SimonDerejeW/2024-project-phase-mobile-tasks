@@ -31,7 +31,7 @@ dependencies:
   connectivity:
   http:
   # Local cache
-  shared_preferences:
+  shared_preferences: ^2.3.1
 
 
 
