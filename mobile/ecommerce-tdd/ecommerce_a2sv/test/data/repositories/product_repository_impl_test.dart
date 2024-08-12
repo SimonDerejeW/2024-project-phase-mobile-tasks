@@ -150,6 +150,42 @@ void main() {
         expect(unpackedResult, equals(testProductEntityList));
       });
     });
+
+    runTestsOnline(() {
+      test('should cache products after getting them from the remote data source',
+          () async {
+        //arrange
+        when(mockProductRemoteDataSource.getAllProducts())
+            .thenAnswer((_) async => testProductModelList);
+        when(mockProductLocalDataSource.cacheAllProducts(testProductModelList))
+            .thenAnswer((_) async => unit);
+
+        //act
+        await productRepositoryImpl.getAllProducts();
+        
+        //assert
+        verify(mockProductLocalDataSource.cacheAllProducts(testProductModelList));
+
+      });
+    });
+
+    runTestsOffline(() {
+      test('should return cached products when no network is available',
+          () async {
+        //arrange
+        when(mockProductLocalDataSource.getAllProducts())
+            .thenAnswer((_) async => testProductModelList);
+
+        //act
+        final result = await productRepositoryImpl.getAllProducts();
+        final unpackedResult =
+            result.fold((failure) => null, (productList) => productList);
+
+        //assert
+        expect(unpackedResult, equals(testProductEntityList));
+      });
+    });
+
     runTestsOnline(() {
       test(
           'should return a server failure when a call to the remote data source is unsuccessful',
@@ -179,6 +215,22 @@ void main() {
             result,
             equals(const Left(
                 ConnectionFailure('Failed to connect to the internet'))));
+      });
+    });
+
+     runTestsOffline(() {
+      test('should return cache failure when failing to get cached products',
+          () async {
+        //arrange
+        when(mockProductLocalDataSource.getAllProducts())
+            .thenThrow(CacheException());
+
+        //act
+        final result = await productRepositoryImpl.getAllProducts();
+        
+
+        //assert
+        expect(result, equals(const Left(CacheFailure('Failed to load cache'))));
       });
     });
   });

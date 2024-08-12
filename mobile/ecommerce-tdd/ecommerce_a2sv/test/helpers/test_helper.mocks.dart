@@ -285,6 +285,27 @@ class MockProductLocalDataSource extends _i1.Mock
   MockProductLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
+
+  @override
+  _i7.Future<List<_i3.ProductModel>> getAllProducts() => (super.noSuchMethod(
+        Invocation.method(
+          #getAllProducts,
+          [],
+        ),
+        returnValue:
+            _i7.Future<List<_i3.ProductModel>>.value(<_i3.ProductModel>[]),
+      ) as _i7.Future<List<_i3.ProductModel>>);
+
+  @override
+  _i7.Future<void> cacheAllProducts(List<_i3.ProductModel>? products) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #cacheAllProducts,
+          [products],
+        ),
+        returnValue: _i7.Future<void>.value(),
+        returnValueForMissingStub: _i7.Future<void>.value(),
+      ) as _i7.Future<void>);
 }
 
 /// A class which mocks [NetworkInfo].
