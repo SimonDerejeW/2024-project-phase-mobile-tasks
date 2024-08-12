@@ -25,10 +25,10 @@ class ProductModel extends Product {
         price: (json['price'] as num).toDouble(),
       );
     } catch (e) {
-      throw JsonParsingException('Failed to cast json to product model: $e');
+      throw JsonParsingException();
     }
   }
-  
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -37,5 +37,25 @@ class ProductModel extends Product {
       'imageUrl': imageUrl,
       'price': price,
     };
+  }
+
+  Product toEntity() => Product(
+      id: id,
+      name: name,
+      description: description,
+      imageUrl: imageUrl,
+      price: price);
+
+  static List<Product> toEntityList(List<ProductModel> models) {
+    return models.map((model) => model.toEntity()).toList();
+  }
+
+  static ProductModel toModel(Product product) {
+    return ProductModel(
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        imageUrl: product.imageUrl,
+        price: product.price);
   }
 }

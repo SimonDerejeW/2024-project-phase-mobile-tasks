@@ -50,11 +50,7 @@ void main() {
         .decode(readJson('helpers/fixtures/dummy_product_response.json'))[1];
 
     //act and assert
-    expect(
-        () => ProductModel.fromJson(jsonMap),
-        throwsA(isA<JsonParsingException>().having(
-            (e) => e.message,
-            'error message',
-            contains('Failed to cast json to product model'))));
+    expect(() => ProductModel.fromJson(jsonMap),
+        throwsA(isA<JsonParsingException>()));
   });
 }
