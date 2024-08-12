@@ -41,7 +41,9 @@ To run the project locally:
    ```
 2. Navigate to the project directory:
    ```sh
-   cd yourprojectname
+   cd mobile
+   cd ecommerce-tdd
+   cd ecommerce_a2sv
    ```
 3. Install dependencies:
    ```sh
