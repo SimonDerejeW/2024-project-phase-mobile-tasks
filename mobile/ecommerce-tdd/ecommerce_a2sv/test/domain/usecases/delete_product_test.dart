@@ -17,27 +17,29 @@ void main() {
 
   const testProductId = '1';
 
-  test('should delete a product given the product ID', () async {
-    //arrange
-    when(mockProductRepository.deleteProduct(testProductId))
-        .thenAnswer((_) async => const Right(null));
+  group('deleteProduct Usecase', () {
+    test('should delete a product given the product ID', () async {
+      //arrange
+      when(mockProductRepository.deleteProduct(testProductId))
+          .thenAnswer((_) async => const Right(null));
 
-    //act
-    final result = await deleteProductUsecase.execute(testProductId);
+      //act
+      final result = await deleteProductUsecase(Params(id: testProductId));
 
-    //expect
-    expect(result, const Right(null));
-  });
+      //expect
+      expect(result, const Right(null));
+    });
 
     test('should return a failure when failure occurs', () async {
-    //arrange
-    when(mockProductRepository.deleteProduct(testProductId))
-        .thenAnswer((_) async => const Left(ServerFailure('test error message')));
+      //arrange
+      when(mockProductRepository.deleteProduct(testProductId)).thenAnswer(
+          (_) async => const Left(ServerFailure('test error message')));
 
-    //act
-    final result = await deleteProductUsecase.execute(testProductId);
+      //act
+      final result = await deleteProductUsecase(Params(id: testProductId));
 
-    //expect
-    expect(result, const Left(ServerFailure('test error message')));
+      //expect
+      expect(result, const Left(ServerFailure('test error message')));
+    });
   });
 }

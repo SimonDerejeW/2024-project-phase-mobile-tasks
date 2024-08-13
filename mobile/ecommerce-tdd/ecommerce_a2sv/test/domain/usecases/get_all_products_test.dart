@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecommerce_a2sv/core/error/failure.dart';
+import 'package:ecommerce_a2sv/core/usecase/usecase.dart';
 import 'package:ecommerce_a2sv/features/product/domain/entities/product.dart';
 import 'package:ecommerce_a2sv/features/product/domain/usecases/get_all_products.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,27 +32,29 @@ void main() {
         price: 20),
   ];
 
-  test('should get all products from the repository', () async {
-    //arrange
-    when(mockProductRepository.getAllProducts())
-        .thenAnswer((_) async => const Right(testProductDetail));
+  group('getAllProducts Usecase', () {
+    test('should get all products from the repository', () async {
+      //arrange
+      when(mockProductRepository.getAllProducts())
+          .thenAnswer((_) async => const Right(testProductDetail));
 
-    //act
-    final result = await getAllProductsUsecase.execute();
+      //act
+      final result = await getAllProductsUsecase(NoParams());
 
-    //assert
-    expect(result, const Right(testProductDetail));
-  });
+      //assert
+      expect(result, const Right(testProductDetail));
+    });
 
     test('should return a failure when failure occurs', () async {
-    //arrange
-    when(mockProductRepository.getAllProducts())
-        .thenAnswer((_) async => const Left(ServerFailure('test error message')));
+      //arrange
+      when(mockProductRepository.getAllProducts()).thenAnswer(
+          (_) async => const Left(ServerFailure('test error message')));
 
-    //act
-    final result = await getAllProductsUsecase.execute();
+      //act
+      final result = await getAllProductsUsecase(NoParams());
 
-    //expect
-    expect(result, const Left(ServerFailure('test error message')));
+      //expect
+      expect(result, const Left(ServerFailure('test error message')));
+    });
   });
 }

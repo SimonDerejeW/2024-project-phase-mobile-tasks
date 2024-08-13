@@ -30,13 +30,14 @@ void main() {
       imageUrl: 'imageUrl',
       price: 23.99);
 
-  test('should update a product given the updated product', () async {
+  group('updateProduct Usecase', (){
+      test('should update a product given the updated product', () async {
     //arrange
     when(mockProductRepository.updateProduct(testProductDetail))
         .thenAnswer((_) async => const Right(updatedTestProductDetail));
 
     //act
-    final result = await updateProductUsecase.execute(testProductDetail);
+    final result = await updateProductUsecase(Params(product: testProductDetail));
 
     //expect
     expect(result, const Right(updatedTestProductDetail));
@@ -48,9 +49,12 @@ void main() {
         .thenAnswer((_) async => const Left(ServerFailure('test error message')));
 
     //act
-    final result = await updateProductUsecase.execute(testProductDetail);
+    final result = await updateProductUsecase(Params(product: testProductDetail));
 
     //expect
     expect(result, const Left(ServerFailure('test error message')));
   });
+  });
+
+
 }

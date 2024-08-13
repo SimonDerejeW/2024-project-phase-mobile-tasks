@@ -23,27 +23,31 @@ void main() {
       imageUrl: 'imageUrl',
       price: 10.99);
 
-  test('should create a product', () async {
-    //arrange
-    when(mockProductRepository.createProduct(testProductDetail))
-        .thenAnswer((_) async => const Right(testProductDetail));
+  group('createProduct Usecase', () {
+    test('should create a product', () async {
+      //arrange
+      when(mockProductRepository.createProduct(testProductDetail))
+          .thenAnswer((_) async => const Right(testProductDetail));
 
-    //act
-    final result = await createProductUsecase.execute(testProductDetail);
+      //act
+      final result =
+          await createProductUsecase(Params(product: testProductDetail));
 
-    //assert
-    expect(result, const Right(testProductDetail));
-  });
+      //assert
+      expect(result, const Right(testProductDetail));
+    });
 
     test('should return a failure when failure occurs', () async {
-    //arrange
-    when(mockProductRepository.createProduct(testProductDetail))
-        .thenAnswer((_) async => const Left(ServerFailure('test error message')));
+      //arrange
+      when(mockProductRepository.createProduct(testProductDetail)).thenAnswer(
+          (_) async => const Left(ServerFailure('test error message')));
 
-    //act
-    final result = await createProductUsecase.execute(testProductDetail);
+      //act
+      final result =
+          await createProductUsecase(Params(product: testProductDetail));
 
-    //expect
-    expect(result, const Left(ServerFailure('test error message')));
+      //expect
+      expect(result, const Left(ServerFailure('test error message')));
+    });
   });
 }
