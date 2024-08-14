@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/constants/constants.dart';
 import '../../../../core/error/exception.dart';
@@ -21,24 +22,42 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
 
   @override
   Future<ProductModel> createProduct(ProductModel product) async {
-    final productJson = {
-      'name': product.name,
-      'description': product.description,
-      'imageUrl': product.imageUrl,
-      'price': product.price
-    };
-    try {
-      final response =
-          await client.post(Uri.parse(Urls.baseUrl), body: productJson);
+    var uri = Uri.parse(Urls.baseUrl);
+    var request = http.MultipartRequest('POST', uri);
+    request.headers['Content-Type'] = 'multipart/form-data';
+    request.fields['name'] = product.name;
+    request.fields['description'] = product.description;
+    request.fields['price'] = product.price.toString();
 
-      if (response.statusCode == 200) {
-        return ProductModel.fromJson(json.decode(response.body)['data']);
+    if (product.imageUrl.isNotEmpty) {
+      var imageFile = File(product.imageUrl);
+      debugPrint('burger: ${imageFile.existsSync()}, ${product.imageUrl}');
+      if (imageFile.existsSync()) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', product.imageUrl));
+      } else {
+        throw ImageException();
+      }
+    }
+
+    try {
+      // print(request.files.length);
+
+      final streamedResponse = await request.send();
+      // print(streamedResponse.statusCode);
+      // print(streamedResponse.reasonPhrase);
+
+      if (streamedResponse.statusCode == 201) {
+        final responseString = await streamedResponse.stream.bytesToString();
+        final jsonResponse = json.decode(responseString);
+        return ProductModel.fromJson(jsonResponse['data']);
       } else {
         throw ServerException();
       }
     } on SocketException {
-      throw const SocketException(
-          'No Internet connection or server unreachable');
+      throw const SocketException(ErrorMessages.socketError);
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 
@@ -53,8 +72,7 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
         throw ServerException();
       }
     } on SocketException {
-      throw const SocketException(
-          'No Internet connection or server unreachable');
+      throw const SocketException(ErrorMessages.socketError);
     }
   }
 
@@ -63,13 +81,13 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
     try {
       final response = await client.get(Uri.parse(Urls.baseUrl));
       if (response.statusCode == 200) {
+        // print(response.body);
         return ProductModel.fromJsonList(json.decode(response.body)['data']);
       } else {
         throw ServerException();
       }
     } on SocketException {
-      throw const SocketException(
-          'No Internet connection or server unreachable');
+      throw const SocketException(ErrorMessages.socketError);
     }
   }
 
@@ -83,8 +101,7 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
         throw ServerException();
       }
     } on SocketException {
-      throw const SocketException(
-          'No Internet connection or server unreachable');
+      throw const SocketException(ErrorMessages.socketError);
     }
   }
 
@@ -101,8 +118,7 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
         throw ServerException();
       }
     } on SocketException {
-      throw const SocketException(
-          'No Internet connection or server unreachable');
+      throw const SocketException(ErrorMessages.socketError);
     }
   }
 }

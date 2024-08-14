@@ -5,16 +5,6 @@ import '../../../../core/usecase/usecase.dart';
 import '../entities/product.dart';
 import '../repositories/product_repository.dart';
 
-// class GetAllProductsUsecase {
-//   final ProductRepository productRepository;
-
-//   GetAllProductsUsecase(this.productRepository);
-
-//   Future<Either<Failure, List<Product>>> execute() {
-//     return productRepository.getAllProducts();
-//   }
-// }
-
 class GetAllProductsUsecase implements UseCase<List<Product>, NoParams> {
   final ProductRepository productRepository;
 

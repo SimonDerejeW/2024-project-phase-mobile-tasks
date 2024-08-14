@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/error/exception.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/platform/network_info.dart';
@@ -29,13 +30,13 @@ class ProductRepositoryImpl extends ProductRepository {
             await remoteDataSource.createProduct(ProductModel.toModel(product));
         return Right(result.toEntity());
       } on ServerException {
-        return const Left(ServerFailure('An error has occurred'));
+        return const Left(ServerFailure(ErrorMessages.serverError));
       } on SocketException {
         return const Left(
-            ConnectionFailure('Failed to connect to the internet'));
+            ConnectionFailure(ErrorMessages.noInternet));
       }
     } else {
-      return const Left(ConnectionFailure('Failed to connect to the internet'));
+      return const Left(ConnectionFailure(ErrorMessages.noInternet));
     }
   }
 
@@ -46,13 +47,13 @@ class ProductRepositoryImpl extends ProductRepository {
         final result = await remoteDataSource.deleteProduct(id);
         return Right(result);
       } on ServerException {
-        return const Left(ServerFailure('An error has occurred'));
+        return const Left(ServerFailure(ErrorMessages.serverError));
       } on SocketException {
         return const Left(
-            ConnectionFailure('Failed to connect to the internet'));
+            ConnectionFailure(ErrorMessages.noInternet));
       }
     } else {
-      return const Left(ConnectionFailure('Failed to connect to the internet'));
+      return const Left(ConnectionFailure(ErrorMessages.noInternet));
     }
   }
 
@@ -69,17 +70,17 @@ class ProductRepositoryImpl extends ProductRepository {
 
         return Right(ProductModel.toEntityList(result));
       } on ServerException {
-        return const Left(ServerFailure('An error has occurred'));
+        return const Left(ServerFailure(ErrorMessages.serverError));
       } on SocketException {
         return const Left(
-            ConnectionFailure('Failed to connect to the internet'));
+            ConnectionFailure(ErrorMessages.noInternet));
       }
     } else {
       try {
         final result = await localDataSource.getAllProducts();
         return Right(ProductModel.toEntityList(result));
       } on CacheException {
-        return const Left(CacheFailure('Failed to load cache'));
+        return const Left(CacheFailure(ErrorMessages.cacheError));
       }
     }
   }
@@ -91,13 +92,13 @@ class ProductRepositoryImpl extends ProductRepository {
         final result = await remoteDataSource.getCurrentProduct(id);
         return Right(result.toEntity());
       } on ServerException {
-        return const Left(ServerFailure('An error has occurred'));
+        return const Left(ServerFailure(ErrorMessages.serverError));
       } on SocketException {
         return const Left(
-            ConnectionFailure('Failed to connect to the internet'));
+            ConnectionFailure(ErrorMessages.noInternet));
       }
     } else {
-      return const Left(ConnectionFailure('Failed to connect to the internet'));
+      return const Left(ConnectionFailure(ErrorMessages.noInternet));
     }
   }
 
@@ -109,13 +110,13 @@ class ProductRepositoryImpl extends ProductRepository {
             await remoteDataSource.updateProduct(ProductModel.toModel(product));
         return Right(result.toEntity());
       } on ServerException {
-        return const Left(ServerFailure('An error has occurred'));
+        return const Left(ServerFailure(ErrorMessages.serverError));
       } on SocketException {
         return const Left(
-            ConnectionFailure('Failed to connect to the internet'));
+            ConnectionFailure(ErrorMessages.noInternet));
       }
     } else {
-      return const Left(ConnectionFailure('Failed to connect to the internet'));
+      return const Left(ConnectionFailure(ErrorMessages.noInternet));
     }
   }
 }
