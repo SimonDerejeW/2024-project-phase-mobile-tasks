@@ -24,7 +24,7 @@ void main() {
           .thenAnswer((_) async => const Right(null));
 
       //act
-      final result = await deleteProductUsecase(Params(id: testProductId));
+      final result = await deleteProductUsecase(DeleteParams(id: testProductId));
 
       //expect
       expect(result, const Right(null));
@@ -36,7 +36,7 @@ void main() {
           (_) async => const Left(ServerFailure('test error message')));
 
       //act
-      final result = await deleteProductUsecase(Params(id: testProductId));
+      final result = await deleteProductUsecase(DeleteParams(id: testProductId));
 
       //expect
       expect(result, const Left(ServerFailure('test error message')));

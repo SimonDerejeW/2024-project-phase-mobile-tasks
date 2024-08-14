@@ -158,8 +158,13 @@ void main() {
     test('should return an updated product model if status code is 200',
         () async {
       //arrange
+      final jsonBody = {
+      'name': testProductModel.name,
+      'description': testProductModel.description,
+      'price': testProductModel.price,
+    };
       when(mockHttpClient.put(Uri.parse(Urls.currentProductById(productId)),
-              body: testProductModel.toJson()))
+              body: jsonBody))
           .thenAnswer((_) async => http.Response(readJson(jsonCurrent), 200));
 
       //act
@@ -173,8 +178,13 @@ void main() {
     test('should throw a ServerException when the response code is not 200',
         () async {
       // arrange
+      final jsonBody = {
+      'name': testProductModel.name,
+      'description': testProductModel.description,
+      'price': testProductModel.price,
+    };
       when(mockHttpClient.put(Uri.parse(Urls.currentProductById(productId)),
-              body: testProductModel.toJson()))
+              body: jsonBody))
           .thenAnswer((_) async => http.Response('Something went wrong', 500));
 
       // act
@@ -186,8 +196,13 @@ void main() {
 
     test('should throw a socket exception if it happens', () {
       //arrange
+      final jsonBody = {
+      'name': testProductModel.name,
+      'description': testProductModel.description,
+      'price': testProductModel.price,
+    };
       when(mockHttpClient.put(Uri.parse(Urls.currentProductById(productId)),
-              body: testProductModel.toJson()))
+              body: jsonBody))
           .thenThrow(const SocketException(
               'No Internet connection or server unreachable'));
 

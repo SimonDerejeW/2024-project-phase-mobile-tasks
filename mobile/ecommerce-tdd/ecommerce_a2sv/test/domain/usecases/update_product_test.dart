@@ -37,7 +37,7 @@ void main() {
         .thenAnswer((_) async => const Right(updatedTestProductDetail));
 
     //act
-    final result = await updateProductUsecase(Params(product: testProductDetail));
+    final result = await updateProductUsecase(UpdateParams(product: testProductDetail));
 
     //expect
     expect(result, const Right(updatedTestProductDetail));
@@ -49,7 +49,7 @@ void main() {
         .thenAnswer((_) async => const Left(ServerFailure('test error message')));
 
     //act
-    final result = await updateProductUsecase(Params(product: testProductDetail));
+    final result = await updateProductUsecase(UpdateParams(product: testProductDetail));
 
     //expect
     expect(result, const Left(ServerFailure('test error message')));

@@ -108,10 +108,15 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
   @override
   Future<ProductModel> updateProduct(ProductModel product) async {
     final productId = product.id;
+    final jsonBody = {
+      'name': product.name,
+      'description': product.description,
+      'price': product.price,
+    };
     try {
       final response = await client.put(
           Uri.parse(Urls.currentProductById(productId)),
-          body: (product.toJson()));
+          body: (jsonBody));
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body)['data']);
       } else {

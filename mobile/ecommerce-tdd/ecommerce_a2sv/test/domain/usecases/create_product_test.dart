@@ -31,7 +31,7 @@ void main() {
 
       //act
       final result =
-          await createProductUsecase(Params(product: testProductDetail));
+          await createProductUsecase(CreateParams(product: testProductDetail));
 
       //assert
       expect(result, const Right(testProductDetail));
@@ -44,7 +44,7 @@ void main() {
 
       //act
       final result =
-          await createProductUsecase(Params(product: testProductDetail));
+          await createProductUsecase(CreateParams(product: testProductDetail));
 
       //expect
       expect(result, const Left(ServerFailure('test error message')));

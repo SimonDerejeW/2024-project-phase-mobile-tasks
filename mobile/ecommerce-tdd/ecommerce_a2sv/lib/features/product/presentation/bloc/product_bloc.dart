@@ -1,15 +1,81 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/usecase/usecase.dart';
 import '../../domain/entities/product.dart';
+import '../../domain/usecases/create_product.dart';
+import '../../domain/usecases/delete_product.dart';
+import '../../domain/usecases/get_all_products.dart';
+import '../../domain/usecases/get_current_product.dart';
+import '../../domain/usecases/update_product.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  ProductBloc() : super(ProductInitial()) {
-    on<ProductEvent>((event, emit) {
-      // TODO: implement event handler
+  final GetAllProductsUsecase _getAllProductsUsecase;
+  final GetCurrentProductUsecase _getCurrentProductUsecase;
+  final CreateProductUsecase _createProductUsecase;
+  final DeleteProductUsecase _deleteProductUsecase;
+  final UpdateProductUsecase _updateProductUsecase;
+
+  ProductBloc(
+      this._getAllProductsUsecase,
+      this._getCurrentProductUsecase,
+      this._createProductUsecase,
+      this._updateProductUsecase,
+      this._deleteProductUsecase)
+      : super(InitialState()) {
+    on<GetSingleProductEvent>((event, emit) async {
+      emit(LoadingState());
+      final result = await _getCurrentProductUsecase(GetParams(id: event.id));
+      result.fold(
+          (failure) => emit(
+                ErrorState(message: failure.message),
+              ),
+          (product) => emit(LoadSingleProductState(product: product)));
+    });
+
+    on<LoadAllProductEvent>((event, emit) async {
+      emit(LoadingState());
+      final result = await _getAllProductsUsecase(NoParams());
+      result.fold(
+          (failure) => emit(
+                ErrorState(message: failure.message),
+              ),
+          (products) => emit(LoadAllProductState(products: products)));
+    });
+
+    on<CreateProductEvent>((event, emit) async {
+      emit(LoadingState());
+      final result =
+          await _createProductUsecase(CreateParams(product: event.product));
+      result.fold(
+          (failure) => emit(
+                ErrorState(message: failure.message),
+              ),
+          (product) => emit(LoadSingleProductState(product: product)));
+    });
+
+    on<UpdateProductEvent>((event, emit) async {
+      emit(LoadingState());
+      final result =
+          await _updateProductUsecase(UpdateParams(product: event.product));
+      result.fold(
+          (failure) => emit(
+                ErrorState(message: failure.message),
+              ),
+          (product) => emit(LoadSingleProductState(product: product)));
+    });
+
+    on<DeleteProductEvent>((event, emit) async {
+      emit(LoadingState());
+      final result = await _deleteProductUsecase(DeleteParams(id: event.id));
+      result.fold(
+          (failure) => emit(
+                ErrorState(message: failure.message),
+              ),
+          (product) => emit(ProductDeletedState()));
     });
   }
 }
