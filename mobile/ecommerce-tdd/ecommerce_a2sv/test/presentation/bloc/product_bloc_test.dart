@@ -129,7 +129,7 @@ void main() {
             bloc.add(CreateProductEvent(product: testProductEntitiy)),
         expect: () => [
               LoadingState(),
-              LoadSingleProductState(product: testProductEntitiy)
+              ProductCreatedState(product: testProductEntitiy)
             ]);
 
     blocTest(
@@ -144,7 +144,7 @@ void main() {
         act: (bloc) =>
             bloc.add(CreateProductEvent(product: testProductEntitiy)),
         expect: () =>
-            [LoadingState(), ErrorState(message: ErrorMessages.serverError)]);
+            [LoadingState(), ProductCreatedErrorState(message: ErrorMessages.serverError)]);
   });
 
   group('UpdateProductEvent', () {
@@ -160,7 +160,7 @@ void main() {
             bloc.add(UpdateProductEvent(product: testProductEntitiy)),
         expect: () => [
               LoadingState(),
-              LoadSingleProductState(product: testProductEntitiy)
+              ProductUpdatedState(product: testProductEntitiy)
             ]);
 
     blocTest(
@@ -174,7 +174,7 @@ void main() {
       },
       act: (bloc) => bloc.add(UpdateProductEvent(product: testProductEntitiy)),
       expect: () =>
-          [LoadingState(), ErrorState(message: ErrorMessages.serverError)]);
+          [LoadingState(), ProductUpdatedErrorState(message: ErrorMessages.serverError)]);
   });
 
   group('DeleteProductEvent', (){

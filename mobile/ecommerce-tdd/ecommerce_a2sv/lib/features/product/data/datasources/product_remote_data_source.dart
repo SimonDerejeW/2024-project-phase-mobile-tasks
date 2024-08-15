@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+
 import '../../../../core/constants/constants.dart';
 import '../../../../core/error/exception.dart';
 import '../models/product_model.dart';
@@ -24,17 +26,18 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
   Future<ProductModel> createProduct(ProductModel product) async {
     var uri = Uri.parse(Urls.baseUrl);
     var request = http.MultipartRequest('POST', uri);
-    request.headers['Content-Type'] = 'multipart/form-data';
+    // request.headers['Content-Type'] = 'multipart/form-data';
     request.fields['name'] = product.name;
     request.fields['description'] = product.description;
     request.fields['price'] = product.price.toString();
 
     if (product.imageUrl.isNotEmpty) {
       var imageFile = File(product.imageUrl);
-      debugPrint('burger: ${imageFile.existsSync()}, ${product.imageUrl}');
+      debugPrint(
+          'created image: ${imageFile.existsSync()}, ${product.imageUrl}');
       if (imageFile.existsSync()) {
         request.files
-            .add(await http.MultipartFile.fromPath('image', product.imageUrl));
+            .add(await http.MultipartFile.fromPath('image', product.imageUrl, contentType: MediaType('image', 'jpg',)));
       } else {
         throw ImageException();
       }
@@ -42,10 +45,14 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
 
     try {
       // print(request.files.length);
+      print(request.fields);
 
-      final streamedResponse = await request.send();
-      // print(streamedResponse.statusCode);
-      // print(streamedResponse.reasonPhrase);
+      http.StreamedResponse streamedResponse = await request.send();
+      // final responseString = await streamedResponse.stream.bytesToString();
+      // print(responseString);
+
+      print(streamedResponse.statusCode);
+      print(streamedResponse.reasonPhrase);
 
       if (streamedResponse.statusCode == 201) {
         final responseString = await streamedResponse.stream.bytesToString();
@@ -108,15 +115,16 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
   @override
   Future<ProductModel> updateProduct(ProductModel product) async {
     final productId = product.id;
-    final jsonBody = {
+    final jsonBody = jsonEncode({
       'name': product.name,
       'description': product.description,
       'price': product.price,
-    };
+    });
     try {
       final response = await client.put(
           Uri.parse(Urls.currentProductById(productId)),
-          body: (jsonBody));
+          body: jsonBody,
+          headers: {'Content-Type': 'application/json'});
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body)['data']);
       } else {
@@ -124,6 +132,9 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
       }
     } on SocketException {
       throw const SocketException(ErrorMessages.socketError);
+      // } catch (e) {
+      //   print('------------------------------------------exception-- ${e.toString()}---------------------');
+      //   throw Exception(e.toString());
     }
   }
 }

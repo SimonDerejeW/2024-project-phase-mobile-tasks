@@ -58,6 +58,7 @@ void main() {
           .thenAnswer((_) async => http.Response(readJson(jsonCurrent), 400));
 
       //act and assert
+      // verify(mockHttpClient.get(any));
       expect(() => productRemoteDataSourceImpl.getCurrentProduct(productId),
           throwsA(isA<ServerException>()));
     });
@@ -158,13 +159,13 @@ void main() {
     test('should return an updated product model if status code is 200',
         () async {
       //arrange
-      final jsonBody = {
+      final jsonBody =jsonEncode( {
       'name': testProductModel.name,
       'description': testProductModel.description,
       'price': testProductModel.price,
-    };
+    });
       when(mockHttpClient.put(Uri.parse(Urls.currentProductById(productId)),
-              body: jsonBody))
+              body: jsonBody,headers: {'Content-Type': 'application/json'}))
           .thenAnswer((_) async => http.Response(readJson(jsonCurrent), 200));
 
       //act
@@ -178,13 +179,13 @@ void main() {
     test('should throw a ServerException when the response code is not 200',
         () async {
       // arrange
-      final jsonBody = {
+      final jsonBody = jsonEncode( {
       'name': testProductModel.name,
       'description': testProductModel.description,
       'price': testProductModel.price,
-    };
+    });
       when(mockHttpClient.put(Uri.parse(Urls.currentProductById(productId)),
-              body: jsonBody))
+              body: jsonBody,headers: {'Content-Type': 'application/json'}))
           .thenAnswer((_) async => http.Response('Something went wrong', 500));
 
       // act
@@ -196,13 +197,13 @@ void main() {
 
     test('should throw a socket exception if it happens', () {
       //arrange
-      final jsonBody = {
+      final jsonBody = jsonEncode( {
       'name': testProductModel.name,
       'description': testProductModel.description,
       'price': testProductModel.price,
-    };
+    });
       when(mockHttpClient.put(Uri.parse(Urls.currentProductById(productId)),
-              body: jsonBody))
+              body: jsonBody,headers: {'Content-Type': 'application/json'}))
           .thenThrow(const SocketException(
               'No Internet connection or server unreachable'));
 

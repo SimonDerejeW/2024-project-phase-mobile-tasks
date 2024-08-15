@@ -34,6 +34,9 @@ class ProductRepositoryImpl extends ProductRepository {
       } on SocketException {
         return const Left(
             ConnectionFailure(ErrorMessages.noInternet));
+      } catch (e) {
+        final errorMessage = e.toString();
+        return Left(RandomFailure(errorMessage));
       }
     } else {
       return const Left(ConnectionFailure(ErrorMessages.noInternet));
@@ -51,6 +54,9 @@ class ProductRepositoryImpl extends ProductRepository {
       } on SocketException {
         return const Left(
             ConnectionFailure(ErrorMessages.noInternet));
+      } catch (e) {
+        final errorMessage = e.toString();
+        return Left(RandomFailure(errorMessage));
       }
     } else {
       return const Left(ConnectionFailure(ErrorMessages.noInternet));
@@ -74,13 +80,20 @@ class ProductRepositoryImpl extends ProductRepository {
       } on SocketException {
         return const Left(
             ConnectionFailure(ErrorMessages.noInternet));
+      } catch (e) {
+        final errorMessage = e.toString();
+        return Left(RandomFailure(errorMessage));
       }
     } else {
       try {
+        
         final result = await localDataSource.getAllProducts();
         return Right(ProductModel.toEntityList(result));
       } on CacheException {
         return const Left(CacheFailure(ErrorMessages.cacheError));
+      } catch (e) {
+        final errorMessage = e.toString();
+        return Left(RandomFailure(errorMessage));
       }
     }
   }
@@ -96,6 +109,9 @@ class ProductRepositoryImpl extends ProductRepository {
       } on SocketException {
         return const Left(
             ConnectionFailure(ErrorMessages.noInternet));
+      } catch (e) {
+        final errorMessage = e.toString();
+        return Left(RandomFailure(errorMessage));
       }
     } else {
       return const Left(ConnectionFailure(ErrorMessages.noInternet));
@@ -114,6 +130,9 @@ class ProductRepositoryImpl extends ProductRepository {
       } on SocketException {
         return const Left(
             ConnectionFailure(ErrorMessages.noInternet));
+      } catch (e) {
+        final errorMessage = e.toString();
+        return Left(RandomFailure(errorMessage));
       }
     } else {
       return const Left(ConnectionFailure(ErrorMessages.noInternet));

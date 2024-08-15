@@ -52,9 +52,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           await _createProductUsecase(CreateParams(product: event.product));
       result.fold(
           (failure) => emit(
-                ErrorState(message: failure.message),
+                ProductCreatedErrorState(message: failure.message),
               ),
-          (product) => emit(LoadSingleProductState(product: product)));
+          (product) => emit(ProductCreatedState(product: product)));
     });
 
     on<UpdateProductEvent>((event, emit) async {
@@ -63,9 +63,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           await _updateProductUsecase(UpdateParams(product: event.product));
       result.fold(
           (failure) => emit(
-                ErrorState(message: failure.message),
+                ProductUpdatedErrorState(message: failure.message),
               ),
-          (product) => emit(LoadSingleProductState(product: product)));
+          (product) => emit(ProductUpdatedState(product: product)));
     });
 
     on<DeleteProductEvent>((event, emit) async {
