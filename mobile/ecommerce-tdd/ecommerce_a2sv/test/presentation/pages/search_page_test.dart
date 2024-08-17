@@ -41,7 +41,7 @@ void main() {
 
   testWidgets('state should have a loading circle', (widgetTester) async {
     //arrange
-    when(() => mockProductBloc.state).thenAnswer((_) => LoadingState());
+    when(() => mockProductBloc.state).thenAnswer((_) => ProductLoading());
 
     //act
     await widgetTester.pumpWidget(_makeTestableWidget(const SearchPage()));
@@ -65,7 +65,7 @@ void main() {
       (WidgetTester tester) async {
     //arrange
     when(() => mockProductBloc.state)
-        .thenReturn(ErrorState(message: 'Test Error Message'));
+        .thenReturn(ProductErrorState(message: 'Test Error Message'));
 
     //act
     await tester.pumpWidget(_makeTestableWidget(const SearchPage()));

@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-
 class MockProductBloc extends MockBloc<ProductEvent, ProductState>
     implements ProductBloc {}
 
@@ -42,38 +41,35 @@ void main() {
 
   testWidgets('state should have a loading circle', (widgetTester) async {
     //arrange
-    when(() => mockProductBloc.state).thenAnswer((_) => LoadingState());
+    when(() => mockProductBloc.state).thenAnswer((_) => ProductLoading());
 
     //act
     await widgetTester.pumpWidget(_makeTestableWidget(const HomePage()));
-    
-    
+
     expect(find.text('Aug 7, 2024'), findsOneWidget);
 
-    
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-    
   });
   testWidgets('HomePage should have ProductCard', (WidgetTester tester) async {
     //arrange
-    when(() => mockProductBloc.state).thenReturn(LoadAllProductState(products: testProductEntityList));
+    when(() => mockProductBloc.state)
+        .thenReturn(LoadAllProductState(products: testProductEntityList));
 
     //act
     await tester.pumpWidget(_makeTestableWidget(const HomePage()));
-    
-    
+
     expect(find.byType(ProductCard), findsWidgets);
-    
   });
-  testWidgets('Homepage shows error message when state is error', (WidgetTester tester) async {
+  testWidgets('Homepage shows error message when state is error',
+      (WidgetTester tester) async {
     //arrange
-    when(() => mockProductBloc.state).thenReturn(ErrorState(message: 'Test Error Message'));
+    when(() => mockProductBloc.state)
+        .thenReturn(ProductErrorState(message: 'Test Error Message'));
 
     //act
     await tester.pumpWidget(_makeTestableWidget(const HomePage()));
     await tester.pumpAndSettle();
-    
+
     expect(find.text('Error: Test Error Message'), findsOneWidget);
-    
   });
 }

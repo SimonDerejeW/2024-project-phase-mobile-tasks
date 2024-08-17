@@ -9,26 +9,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-
-
 class MockProductBloc extends MockBloc<ProductEvent, ProductState>
     implements ProductBloc {}
 
 // Fallback classes for Mocktail
 class FakeProductEvent extends Fake implements ProductEvent {}
-class FakeProductState extends Fake implements ProductState {}
 
+class FakeProductState extends Fake implements ProductState {}
 
 void main() {
   late MockProductBloc mockProductBloc;
   late Product testProduct;
 
-    setUpAll(() {
+  setUpAll(() {
     registerFallbackValue(FakeProductEvent());
     registerFallbackValue(FakeProductState());
   });
-
-  
 
   setUp(() {
     mockProductBloc = MockProductBloc();
@@ -42,8 +38,6 @@ void main() {
     );
   });
 
- 
-
   Widget _makeTestableWidget() {
     return BlocProvider<ProductBloc>.value(
       value: mockProductBloc,
@@ -55,11 +49,11 @@ void main() {
 
   testWidgets('displays product details', (WidgetTester tester) async {
     // Arrange
-    when(() => mockProductBloc.state).thenReturn(InitialState());
+    when(() => mockProductBloc.state).thenReturn(ProductInitialState());
 
     // Act
     await tester.pumpWidget(_makeTestableWidget());
-    await tester.pumpAndSettle(); 
+    await tester.pumpAndSettle();
 
     // Assert
     expect(find.text('Test Product'), findsOneWidget);
@@ -67,26 +61,30 @@ void main() {
     expect(find.text('\$100.0'), findsOneWidget);
   });
 
-  testWidgets('DELETE button triggers DeleteProductEvent', (WidgetTester tester) async {
+  testWidgets('DELETE button triggers DeleteProductEvent',
+      (WidgetTester tester) async {
     // Arrange
-    when(() => mockProductBloc.state).thenReturn(InitialState());
+    when(() => mockProductBloc.state).thenReturn(ProductInitialState());
 
     // Act
     await tester.pumpWidget(_makeTestableWidget());
     await tester.pumpAndSettle();
     await tester.tap(find.text('DELETE'));
-    await tester.pump(); 
+    await tester.pump();
 
     // Assert
-    verify(() => mockProductBloc.add(DeleteProductEvent(id: testProduct.id))).called(1);
+    verify(() => mockProductBloc.add(DeleteProductEvent(id: testProduct.id)))
+        .called(1);
   });
 
-  testWidgets('shows success Snackbar on successful deletion', (WidgetTester tester) async {
+  testWidgets('shows success Snackbar on successful deletion',
+      (WidgetTester tester) async {
     // Arrange
     whenListen(
       mockProductBloc,
-      Stream<ProductState>.fromIterable([InitialState(),ProductDeletedState()]),
-      initialState: InitialState(),
+      Stream<ProductState>.fromIterable(
+          [ProductInitialState(), ProductDeletedState()]),
+      initialState: ProductInitialState(),
     );
 
     // Act
@@ -99,12 +97,13 @@ void main() {
     expect(find.text('Product Deleted Successfully'), findsOneWidget);
   });
 
-  testWidgets('shows error Snackbar on deletion failure', (WidgetTester tester) async {
+  testWidgets('shows error Snackbar on deletion failure',
+      (WidgetTester tester) async {
     // Arrange
     whenListen(
       mockProductBloc,
-      Stream<ProductState>.fromIterable([ErrorState(message: '')]),
-      initialState: InitialState(),
+      Stream<ProductState>.fromIterable([ProductErrorState(message: '')]),
+      initialState: ProductInitialState(),
     );
 
     // Act

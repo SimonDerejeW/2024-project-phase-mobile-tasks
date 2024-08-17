@@ -22,7 +22,7 @@ class ProductDetailsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: BlocListener<ProductBloc, ProductState>(
           listener: (context, state) {
-            if (state is ErrorState) {
+            if (state is ProductErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                   content: Text('Failed to delete the product')));
             } else if (state is ProductDeletedState) {
@@ -166,7 +166,7 @@ class ProductDetailsPage extends StatelessWidget {
                                     const Color.fromRGBO(255, 19, 19, 0.79),
                                 buttonWidth: 120,
                                 buttonHeight: 45,
-                                child: state is LoadingState
+                                child: state is ProductLoading
                                     ? const CircularProgressIndicator(
                                         valueColor: AlwaysStoppedAnimation<
                                                 Color>(

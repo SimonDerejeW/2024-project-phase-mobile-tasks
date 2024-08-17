@@ -77,7 +77,7 @@ Widget buildSearch(BuildContext context) {
         height: 30,
       ),
       BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
-        if (state is LoadingState) {
+        if (state is ProductLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -96,7 +96,7 @@ Widget buildSearch(BuildContext context) {
                   );
                 }),
           );
-        } else if (state is ErrorState) {
+        } else if (state is ProductErrorState) {
           return Center(
             child: Text('Error: ${state.message}'),
           );

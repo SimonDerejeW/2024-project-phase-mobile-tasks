@@ -107,7 +107,7 @@ class HomePage extends StatelessWidget {
 
 Widget buildHome(BuildContext context) {
   context.read<ProductBloc>().add(LoadAllProductEvent());
-  
+
   return Column(
     children: [
       Row(
@@ -140,7 +140,7 @@ Widget buildHome(BuildContext context) {
         height: 10,
       ),
       BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
-        if (state is LoadingState) {
+        if (state is ProductLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -169,7 +169,7 @@ Widget buildHome(BuildContext context) {
                   }),
             ),
           );
-        } else if (state is ErrorState) {
+        } else if (state is ProductErrorState) {
           return Center(
             child: Text('Error: ${state.message}'),
           );

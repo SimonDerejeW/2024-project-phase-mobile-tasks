@@ -46,7 +46,7 @@ void main() {
   const testId = '1';
 
   test('initial state should be InitialState', () {
-    expect(productBloc.state, InitialState());
+    expect(productBloc.state, ProductInitialState());
   });
 
   group('GetSingleProduct Event', () {
@@ -62,7 +62,7 @@ void main() {
         },
         act: (bloc) => bloc.add(GetSingleProductEvent(id: testId)),
         expect: () => [
-              LoadingState(),
+              ProductLoading(),
               LoadSingleProductState(product: testProductEntitiy)
             ]);
     blocTest<ProductBloc, ProductState>(
@@ -77,8 +77,10 @@ void main() {
           return productBloc;
         },
         act: (bloc) => bloc.add(GetSingleProductEvent(id: testId)),
-        expect: () =>
-            [LoadingState(), ErrorState(message: ErrorMessages.serverError)]);
+        expect: () => [
+              ProductLoading(),
+              ProductErrorState(message: ErrorMessages.serverError)
+            ]);
   });
 
   group('LoadAllProduct Event', () {
@@ -91,7 +93,7 @@ void main() {
         },
         act: (bloc) => bloc.add(LoadAllProductEvent()),
         expect: () => [
-              LoadingState(),
+              ProductLoading(),
               LoadAllProductState(products: const [testProductEntitiy])
             ]);
     blocTest(
@@ -102,18 +104,22 @@ void main() {
           return productBloc;
         },
         act: (bloc) => bloc.add(LoadAllProductEvent()),
-        expect: () =>
-            [LoadingState(), ErrorState(message: ErrorMessages.serverError)]);
+        expect: () => [
+              ProductLoading(),
+              ProductErrorState(message: ErrorMessages.serverError)
+            ]);
     blocTest(
         'emits [LoadingState, ErrorState] when LoadAllProductEvent is unsuccessful.',
         build: () {
-          when(mockGetAllProductsUsecase(NoParams())).thenAnswer((_) async =>
-              const Left(CacheFailure(ErrorMessages.cacheError)));
+          when(mockGetAllProductsUsecase(NoParams())).thenAnswer(
+              (_) async => const Left(CacheFailure(ErrorMessages.cacheError)));
           return productBloc;
         },
         act: (bloc) => bloc.add(LoadAllProductEvent()),
-        expect: () =>
-            [LoadingState(), ErrorState(message: ErrorMessages.cacheError)]);
+        expect: () => [
+              ProductLoading(),
+              ProductErrorState(message: ErrorMessages.cacheError)
+            ]);
   });
 
   group('CreateProductEvent', () {
@@ -128,7 +134,7 @@ void main() {
         act: (bloc) =>
             bloc.add(CreateProductEvent(product: testProductEntitiy)),
         expect: () => [
-              LoadingState(),
+              ProductLoading(),
               ProductCreatedState(product: testProductEntitiy)
             ]);
 
@@ -143,8 +149,10 @@ void main() {
         },
         act: (bloc) =>
             bloc.add(CreateProductEvent(product: testProductEntitiy)),
-        expect: () =>
-            [LoadingState(), ProductCreatedErrorState(message: ErrorMessages.serverError)]);
+        expect: () => [
+              ProductLoading(),
+              ProductCreatedErrorState(message: ErrorMessages.serverError)
+            ]);
   });
 
   group('UpdateProductEvent', () {
@@ -159,47 +167,50 @@ void main() {
         act: (bloc) =>
             bloc.add(UpdateProductEvent(product: testProductEntitiy)),
         expect: () => [
-              LoadingState(),
+              ProductLoading(),
               ProductUpdatedState(product: testProductEntitiy)
             ]);
 
     blocTest(
-      'emits [LoadingState, ErrorState] when UpdateProductEvent is unsuccessful',
-      build: () {
-        when(mockUpdateProductUsecase(
-                UpdateParams(product: testProductEntitiy)))
-            .thenAnswer((_) async =>
-                const Left(ServerFailure(ErrorMessages.serverError)));
-        return productBloc;
-      },
-      act: (bloc) => bloc.add(UpdateProductEvent(product: testProductEntitiy)),
-      expect: () =>
-          [LoadingState(), ProductUpdatedErrorState(message: ErrorMessages.serverError)]);
+        'emits [LoadingState, ErrorState] when UpdateProductEvent is unsuccessful',
+        build: () {
+          when(mockUpdateProductUsecase(
+                  UpdateParams(product: testProductEntitiy)))
+              .thenAnswer((_) async =>
+                  const Left(ServerFailure(ErrorMessages.serverError)));
+          return productBloc;
+        },
+        act: (bloc) =>
+            bloc.add(UpdateProductEvent(product: testProductEntitiy)),
+        expect: () => [
+              ProductLoading(),
+              ProductUpdatedErrorState(message: ErrorMessages.serverError)
+            ]);
   });
 
-  group('DeleteProductEvent', (){
+  group('DeleteProductEvent', () {
     blocTest(
-      'emits [LoadingState, ProductDeletedState] when DeleteProductEvent is added',
-      build: (){
-        when(mockDeleteProductUsecase(DeleteParams(id: testId)))
-            .thenAnswer((_) async => const Right(null));
-        return productBloc;
-      },
-      act: (bloc) => bloc.add(DeleteProductEvent(id: testId)),
-      expect: () => [LoadingState(), ProductDeletedState()]
-    );
+        'emits [LoadingState, ProductDeletedState] when DeleteProductEvent is added',
+        build: () {
+          when(mockDeleteProductUsecase(DeleteParams(id: testId)))
+              .thenAnswer((_) async => const Right(null));
+          return productBloc;
+        },
+        act: (bloc) => bloc.add(DeleteProductEvent(id: testId)),
+        expect: () => [ProductLoading(), ProductDeletedState()]);
 
     blocTest(
-      'emits [LoadingState, ErrorState] when DeleteProductEvent is unsuccessful',
-      build: (){
-        when(mockDeleteProductUsecase(DeleteParams(id: testId)))
-            .thenAnswer((_) async => const Left(ServerFailure(ErrorMessages.serverError)));
-        return productBloc;
-      },
-      act: (bloc) => bloc.add(DeleteProductEvent(id: testId)),
-      expect: () => [LoadingState(), ErrorState(message: ErrorMessages.serverError)]
-    );
+        'emits [LoadingState, ErrorState] when DeleteProductEvent is unsuccessful',
+        build: () {
+          when(mockDeleteProductUsecase(DeleteParams(id: testId))).thenAnswer(
+              (_) async =>
+                  const Left(ServerFailure(ErrorMessages.serverError)));
+          return productBloc;
+        },
+        act: (bloc) => bloc.add(DeleteProductEvent(id: testId)),
+        expect: () => [
+              ProductLoading(),
+              ProductErrorState(message: ErrorMessages.serverError)
+            ]);
   });
-
-  
 }

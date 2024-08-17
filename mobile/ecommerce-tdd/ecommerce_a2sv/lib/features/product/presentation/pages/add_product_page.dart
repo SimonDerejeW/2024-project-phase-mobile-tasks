@@ -260,7 +260,7 @@ class _AddProductPageState extends State<AddProductPage> {
                           borderColor: Theme.of(context).primaryColor,
                           buttonWidth: double.maxFinite,
                           buttonHeight: 45,
-                          child: state is LoadingState
+                          child: state is ProductLoading
                               ? const CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       Colors.white),

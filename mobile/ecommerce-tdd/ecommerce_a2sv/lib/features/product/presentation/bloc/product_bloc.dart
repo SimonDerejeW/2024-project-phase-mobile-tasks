@@ -25,30 +25,30 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       this._createProductUsecase,
       this._updateProductUsecase,
       this._deleteProductUsecase)
-      : super(InitialState()) {
+      : super(ProductInitialState()) {
     on<GetSingleProductEvent>((event, emit) async {
-      emit(LoadingState());
+      emit(ProductLoading());
       final result = await _getCurrentProductUsecase(GetParams(id: event.id));
       result.fold(
           (failure) => emit(
-                ErrorState(message: failure.message),
+                ProductErrorState(message: failure.message),
               ),
           (product) => emit(LoadSingleProductState(product: product)));
     });
 
     on<LoadAllProductEvent>((event, emit) async {
       print("LoadAllProductEvent has been dispatched");
-      emit(LoadingState());
+      emit(ProductLoading());
       final result = await _getAllProductsUsecase(NoParams());
       result.fold(
           (failure) => emit(
-                ErrorState(message: failure.message),
+                ProductErrorState(message: failure.message),
               ),
           (products) => emit(LoadAllProductState(products: products)));
     });
 
     on<CreateProductEvent>((event, emit) async {
-      emit(LoadingState());
+      emit(ProductLoading());
       final result =
           await _createProductUsecase(CreateParams(product: event.product));
       result.fold(
@@ -59,7 +59,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<UpdateProductEvent>((event, emit) async {
-      emit(LoadingState());
+      emit(ProductLoading());
       final result =
           await _updateProductUsecase(UpdateParams(product: event.product));
       result.fold(
@@ -70,11 +70,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<DeleteProductEvent>((event, emit) async {
-      emit(LoadingState());
+      emit(ProductLoading());
       final result = await _deleteProductUsecase(DeleteParams(id: event.id));
       result.fold(
           (failure) => emit(
-                ErrorState(message: failure.message),
+                ProductErrorState(message: failure.message),
               ),
           (product) => emit(ProductDeletedState()));
     });
