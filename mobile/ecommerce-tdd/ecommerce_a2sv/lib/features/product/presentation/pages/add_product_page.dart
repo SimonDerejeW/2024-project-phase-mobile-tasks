@@ -25,6 +25,7 @@ class _AddProductPageState extends State<AddProductPage> {
   File? _image;
 
   final ImagePicker _picker = ImagePicker();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -52,6 +53,42 @@ class _AddProductPageState extends State<AddProductPage> {
       setState(() {
         _image = File(pickedFile.path); // Store the selected image in _image
       });
+    }
+  }
+
+  void _handleSubmit() {
+    if (_formKey.currentState!.validate()) {
+      // if (_image == null || widget.product?.imageUrl == null) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     const SnackBar(content: Text('Please select an image')),
+      //   );
+      //   return;
+      // }
+      if (widget.isAdd) {
+        context.read<ProductBloc>().add(
+              CreateProductEvent(
+                product: Product(
+                  id: '',
+                  name: nameController.text,
+                  price: double.parse(priceController.text),
+                  description: descriptionController.text,
+                  imageUrl: _image!.path,
+                ),
+              ),
+            );
+      } else if (widget.product != null) {
+        context.read<ProductBloc>().add(
+              UpdateProductEvent(
+                product: Product(
+                  id: widget.product!.id,
+                  name: nameController.text,
+                  price: double.parse(priceController.text),
+                  description: descriptionController.text,
+                  imageUrl: '',
+                ),
+              ),
+            );
+      }
     }
   }
 
@@ -84,183 +121,176 @@ class _AddProductPageState extends State<AddProductPage> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: Container(
-                      height: 200,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(243, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(8),
-                        image:
-                            _image != null // Show the picked image if available
-                                ? DecorationImage(
-                                    image: FileImage(_image!),
-                                    fit: BoxFit.cover,
-                                  )
-                                : null,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        height: 200,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(243, 243, 243, 1),
+                          borderRadius: BorderRadius.circular(8),
+                          image: _image !=
+                                  null // Show the picked image if available
+                              ? DecorationImage(
+                                  image: FileImage(_image!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                        ),
+                        child: _image == null
+                            ? const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.image_outlined,
+                                    size: 40,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text('Upload Image')
+                                ],
+                              )
+                            : null,
                       ),
-                      child: _image == null
-                          ? const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.image_outlined,
-                                  size: 40,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text('Upload Image')
-                              ],
-                            )
-                          : null,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const Text('Name'),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                        fillColor: Color.fromRGBO(243, 243, 243, 1),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Category'),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: typeController,
-                    decoration: const InputDecoration(
-                        fillColor: Color.fromRGBO(243, 243, 243, 1),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Price'),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: priceController,
-                    decoration: const InputDecoration(
-                        hintText: '\$',
-                        hintTextDirection: TextDirection.rtl,
-                        fillColor: Color.fromRGBO(243, 243, 243, 1),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text('Description'),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  TextField(
-                    controller: descriptionController,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                        fillColor: Color.fromRGBO(243, 243, 243, 1),
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  BlocBuilder<ProductBloc, ProductState>(
-                    builder: (context, state) {
-                      return CustomOutlinedButton(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        foregroundColor: Colors.white,
-                        borderColor: Theme.of(context).primaryColor,
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text('Name'),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                          fillColor: Color.fromRGBO(243, 243, 243, 1),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          )),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the product name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Category'),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextField(
+                      controller: typeController,
+                      decoration: const InputDecoration(
+                          fillColor: Color.fromRGBO(243, 243, 243, 1),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Price'),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      controller: priceController,
+                      decoration: const InputDecoration(
+                          hintText: '\$',
+                          hintTextDirection: TextDirection.rtl,
+                          fillColor: Color.fromRGBO(243, 243, 243, 1),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          )),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the product price';
+                        }
+                        final price = double.tryParse(value);
+                        if (price == null || price <= 0) {
+                          return 'Please enter a valid price';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text('Description'),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
+                      controller: descriptionController,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                          fillColor: Color.fromRGBO(243, 243, 243, 1),
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                          )),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the product description';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    BlocBuilder<ProductBloc, ProductState>(
+                      builder: (context, state) {
+                        return CustomOutlinedButton(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.white,
+                          borderColor: Theme.of(context).primaryColor,
+                          buttonWidth: double.maxFinite,
+                          buttonHeight: 45,
+                          child: state is LoadingState
+                              ? const CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                )
+                              : Text(
+                                  widget.isAdd ? 'ADD' : 'UPDATE',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600),
+                                ),
+                          onPressed: _handleSubmit,
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    CustomOutlinedButton(
+                        backgroundColor: Colors.white,
+                        foregroundColor:
+                            const Color.fromRGBO(255, 19, 19, 0.79),
+                        borderColor: const Color.fromRGBO(255, 19, 19, 0.79),
                         buttonWidth: double.maxFinite,
                         buttonHeight: 45,
-                        child: state is LoadingState
-                            ? const CircularProgressIndicator(
-                                valueColor:
-                                    AlwaysStoppedAnimation<Color>(Colors.white),
-                              )
-                            : Text(
-                                widget.isAdd ? 'ADD' : 'UPDATE',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600),
-                              ),
-                        onPressed: () {
-                          if (widget.isAdd) {
-                            debugPrint('Create Pressed-------------------');
-                            // Create new product
-                            context.read<ProductBloc>().add(
-                                  CreateProductEvent(
-                                    product: Product(
-                                      id: '', // Assign a proper ID if necessary
-                                      name: nameController.text,
-                                      price: double.parse(priceController.text),
-                                      description: descriptionController.text,
-                                      imageUrl: _image!
-                                          .path, // Handle the image URL accordingly
-                                    ),
-                                  ),
-                                );
-                          } else if (widget.product != null) {
-                            debugPrint(
-                                'Update Pressed Product ID: ${widget.product!.id}');
-                            // Update existing product
-                            context.read<ProductBloc>().add(
-                                  UpdateProductEvent(
-                                    product: Product(
-                                      id: widget.product!
-                                          .id, // Retain the original ID
-                                      name: nameController.text,
-                                      price: double.parse(priceController.text),
-                                      description: descriptionController.text,
-                                      imageUrl:
-                                          '', // Handle the image URL accordingly
-                                    ),
-                                  ),
-                                );
-                          }
-                        },
-                      );
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  CustomOutlinedButton(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color.fromRGBO(255, 19, 19, 0.79),
-                      borderColor: const Color.fromRGBO(255, 19, 19, 0.79),
-                      buttonWidth: double.maxFinite,
-                      buttonHeight: 45,
-                      child: const Text(
-                        'DELETE',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () {}),
-                ],
+                        child: const Text(
+                          'DELETE',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () {}),
+                  ],
+                ),
               ),
             ),
           ),

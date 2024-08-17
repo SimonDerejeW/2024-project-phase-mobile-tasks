@@ -37,6 +37,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
 
     on<LoadAllProductEvent>((event, emit) async {
+      print("LoadAllProductEvent has been dispatched");
       emit(LoadingState());
       final result = await _getAllProductsUsecase(NoParams());
       result.fold(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/product.dart';
@@ -36,8 +37,13 @@ class ProductCard extends StatelessWidget {
                       width: double.infinity,
                       child: Opacity(
                         opacity: 0.8,
-                        child: Image.network(
-                          product.imageUrl,
+                        child: CachedNetworkImage(
+                          imageUrl: product.imageUrl,
+                          placeholder: (context, url) => const SizedBox(
+                              height: 185,
+                              child: const CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                           fit: BoxFit.cover,
                         ),
                       )),
@@ -52,10 +58,15 @@ class ProductCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                product.name,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 20),
+                              Flexible(
+                                child: Text(
+                                  product.name,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20),
+                                  overflow:
+                                      TextOverflow.ellipsis, // Handle overflow
+                                ),
                               ),
                               Text(
                                 '\$${product.price}',
@@ -67,9 +78,13 @@ class ProductCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                "Chuck Taylor's",
-                                style: const TextStyle(color: Colors.black45),
+                              const Flexible(
+                                child: Text(
+                                  "Chuck Taylor's",
+                                  style: const TextStyle(color: Colors.black45),
+                                  overflow:
+                                      TextOverflow.ellipsis, // Handle overflow
+                                ),
                               ),
                               Row(
                                 children: [

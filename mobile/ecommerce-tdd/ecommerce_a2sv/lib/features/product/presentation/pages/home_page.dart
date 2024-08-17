@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../injection_container.dart';
 import '../../domain/entities/product.dart';
 import '../bloc/product_bloc.dart';
 import '../widgets/product_card.dart';
@@ -106,80 +105,80 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
-
-BlocProvider<ProductBloc> buildHome(BuildContext context) {
+Widget buildHome(BuildContext context) {
+  context.read<ProductBloc>().add(LoadAllProductEvent());
   
-  return BlocProvider(
-    create: (_) => sl<ProductBloc>()..add(LoadAllProductEvent()),
-    child: Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Available Products',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-            ),
-            Container(
-                decoration: BoxDecoration(
-                  border: Border.all(width: 2, color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushNamed('/search');
-                    },
-                    splashColor: Colors.grey.shade300,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.grey.shade600,
-                      ),
-                    )))
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
-          if (state is LoadingState) {
-            return const Center(
-              
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is LoadAllProductState) {
-            return Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async{
-                  context.read<ProductBloc>().add(LoadAllProductEvent());
-                },
-                child: ListView.builder(
-                    itemCount: state.products.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ProductCard(
-                        product: Product(
-                            id: state.products[index].id,
-                            imageUrl: state.products[index].imageUrl,
-                            name: state.products[index].name,
-                            price: state.products[index].price,
-                            description: state.products[index].description),
-                      );
-                    }),
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text(
+            'Available Products',
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          ),
+          Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2, color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(5),
               ),
-            );
-          } else if (state is ErrorState) {
-            return Center(
-              child: Text('Error: ${state.message}'),
-            );
-          } else {
-            return const Center(
-              child: Text('No products available'),
-            );
-          }
-        }),
-      ],
-    ),
+              child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/search');
+                  },
+                  splashColor: Colors.grey.shade300,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.grey.shade600,
+                    ),
+                  )))
+        ],
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      BlocBuilder<ProductBloc, ProductState>(builder: (context, state) {
+        if (state is LoadingState) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is LoadAllProductState) {
+          return Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                context.read<ProductBloc>().add(LoadAllProductEvent());
+              },
+              child: ListView.separated(
+                  itemCount: state.products.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const SizedBox(
+                      height: 10,
+                    );
+                  },
+                  itemBuilder: (BuildContext context, int index) {
+                    return ProductCard(
+                      product: Product(
+                          id: state.products[index].id,
+                          imageUrl: state.products[index].imageUrl,
+                          name: state.products[index].name,
+                          price: state.products[index].price,
+                          description: state.products[index].description),
+                    );
+                  }),
+            ),
+          );
+        } else if (state is ErrorState) {
+          return Center(
+            child: Text('Error: ${state.message}'),
+          );
+        } else {
+          return const Center(
+            child: Text('No products available'),
+          );
+        }
+      }),
+    ],
   );
 }

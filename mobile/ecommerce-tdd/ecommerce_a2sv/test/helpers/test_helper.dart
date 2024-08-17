@@ -10,6 +10,7 @@ import 'package:ecommerce_a2sv/features/product/domain/usecases/delete_product.d
 import 'package:ecommerce_a2sv/features/product/domain/usecases/get_all_products.dart';
 import 'package:ecommerce_a2sv/features/product/domain/usecases/get_current_product.dart';
 import 'package:ecommerce_a2sv/features/product/domain/usecases/update_product.dart';
+import 'package:ecommerce_a2sv/features/product/presentation/bloc/product_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:mockito/annotations.dart';
@@ -28,7 +29,8 @@ import 'package:shared_preferences/shared_preferences.dart';
     GetAllProductsUsecase,
     CreateProductUsecase,
     UpdateProductUsecase,
-    DeleteProductUsecase
+    DeleteProductUsecase,
+    
   ],
   customMocks: [MockSpec<http.Client>(as: #MockHttpClient)]
 )

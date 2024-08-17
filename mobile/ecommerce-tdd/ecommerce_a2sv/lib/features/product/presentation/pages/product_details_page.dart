@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../domain/entities/product.dart';
@@ -11,18 +12,6 @@ class ProductDetailsPage extends StatelessWidget {
     super.key,
     required this.product,
   });
-
-  // void deleteShoe(BuildContext context) {
-  //   bool status = mockData.remove(shoe);
-  //   if (status) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: const Text('Successfully deleted product')));
-  //     Navigator.of(context).pushNamed('/');
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Failed to delete the product')));
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +35,8 @@ class ProductDetailsPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Stack(children: [
-                Image.network(
-                  product.imageUrl,
+                CachedNetworkImage(
+                  imageUrl: product.imageUrl,
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height * 0.32,
                   fit: BoxFit.cover,
@@ -199,10 +188,10 @@ class ProductDetailsPage extends StatelessWidget {
                                 buttonWidth: 120,
                                 buttonHeight: 45,
                                 child: const Text(
-                                        'UPDATE',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600),
-                                      ),
+                                  'UPDATE',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600),
+                                ),
                                 onPressed: () {
                                   Navigator.of(context).pushNamed('/update',
                                       arguments: Product(
