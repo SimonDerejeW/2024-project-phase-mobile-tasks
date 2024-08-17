@@ -13,8 +13,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v4
-          with:
-            subdirectory: mobile/ecommerce-tdd/ecommerce_a2sv
+          
         
     
         - name: Set up Flutter
@@ -24,6 +23,8 @@ jobs:
     
         - name: Install dependencies
           run: flutter pub get
+          working-directory: mobile/ecommerce-tdd/ecommerce_a2sv
     
         - name : Run tests
           run: flutter test
+          working-directory: mobile/ecommerce-tdd/ecommerce_a2sv
