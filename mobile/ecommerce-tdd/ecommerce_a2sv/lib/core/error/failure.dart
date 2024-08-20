@@ -23,3 +23,11 @@ class CacheFailure extends Failure {
 class RandomFailure extends Failure {
   const RandomFailure(String message) : super(message);
 }
+
+class UnauthorizedFailure extends Failure{
+  UnauthorizedFailure(super.message);
+}
+
+class UserAlreadyExistsFailure extends Failure{
+  UserAlreadyExistsFailure(super.message);
+}

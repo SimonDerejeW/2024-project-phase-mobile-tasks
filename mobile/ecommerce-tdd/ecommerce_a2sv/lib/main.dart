@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'bloc_observer.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/pages/sign_in_page.dart';
+import 'features/auth/presentation/pages/sign_up_page.dart';
+import 'features/auth/presentation/pages/splash_page.dart';
 import 'features/product/domain/entities/product.dart';
 import 'features/product/presentation/bloc/product_bloc.dart';
 import 'features/product/presentation/pages/add_product_page.dart';
@@ -24,31 +29,54 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProductBloc(
-        sl(),
-        sl(),
-        sl(),
-        sl(),
-        sl(),
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductBloc(
+            sl(),
+            sl(),
+            sl(),
+            sl(),
+            sl(),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => AuthBloc(
+            sl(),
+            sl(),
+            sl(),
+            sl(),
+          ),
+        ),
+      ],
       child: MaterialApp(
         onGenerateRoute: (settings) {
           switch (settings.name) {
-            case '/':
+            case '/home':
               return _createRoute(const HomePage());
             case '/search':
-            return _createRoute(const SearchPage());
+              return _createRoute(const SearchPage());
             case '/add':
-            return _createRoute(const AddProductPage(isAdd: true,));
+              return _createRoute(const AddProductPage(
+                isAdd: true,
+              ));
             case '/update':
-            final args = settings.arguments as Product;
-            return _createRoute(AddProductPage(isAdd: false,product: args,));
+              final args = settings.arguments as Product;
+              return _createRoute(AddProductPage(
+                isAdd: false,
+                product: args,
+              ));
             case '/details':
               final args = settings.arguments as Product;
               return _createRoute(ProductDetailsPage(
                 product: args,
               ));
+            case '/splash':
+              return _createRoute(const SplashPage());
+            case '/login':
+              return _createRoute(const SignInPage());
+            case '/signup':
+              return _createRoute(const SignUpPage());
             default:
               return null;
           }
@@ -58,7 +86,7 @@ class MyApp extends StatelessWidget {
             primaryColor: const Color.fromARGB(255, 63, 81, 243),
             colorScheme: ColorScheme.fromSeed(
                 seedColor: const Color.fromARGB(255, 63, 81, 243))),
-        home: const HomePage(),
+        initialRoute: '/splash',
         debugShowCheckedModeBanner: false,
       ),
     );

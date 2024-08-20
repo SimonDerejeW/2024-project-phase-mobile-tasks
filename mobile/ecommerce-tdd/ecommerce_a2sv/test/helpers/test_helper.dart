@@ -1,7 +1,15 @@
 import 'dart:io';
 
+import 'package:ecommerce_a2sv/core/network/custom_client.dart';
 import 'package:ecommerce_a2sv/core/platform/network_info.dart';
 import 'package:ecommerce_a2sv/core/usecase/usecase.dart';
+import 'package:ecommerce_a2sv/features/auth/data/datasources/auth_local_data_source.dart';
+import 'package:ecommerce_a2sv/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:ecommerce_a2sv/features/auth/domain/repositories/auth_repository.dart';
+import 'package:ecommerce_a2sv/features/auth/domain/usecases/get_user.dart';
+import 'package:ecommerce_a2sv/features/auth/domain/usecases/login.dart';
+import 'package:ecommerce_a2sv/features/auth/domain/usecases/logout.dart';
+import 'package:ecommerce_a2sv/features/auth/domain/usecases/register.dart';
 import 'package:ecommerce_a2sv/features/product/data/datasources/product_local_data_source.dart';
 import 'package:ecommerce_a2sv/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:ecommerce_a2sv/features/product/domain/repositories/product_repository.dart';
@@ -30,6 +38,14 @@ import 'package:shared_preferences/shared_preferences.dart';
     CreateProductUsecase,
     UpdateProductUsecase,
     DeleteProductUsecase,
+    CustomHttpClient,
+    AuthRepository,
+    AuthRemoteDataSource,
+    AuthLocalDataSource,
+    LoginUsecase,
+    RegisterUsecase,
+    LogoutUsecase,
+    GetUserUsecase
     
   ],
   customMocks: [MockSpec<http.Client>(as: #MockHttpClient)]

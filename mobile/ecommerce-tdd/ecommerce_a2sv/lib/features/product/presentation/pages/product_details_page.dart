@@ -24,11 +24,12 @@ class ProductDetailsPage extends StatelessWidget {
           listener: (context, state) {
             if (state is ProductErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Failed to delete the product')));
+                  content: Text('Failed to delete the product'), backgroundColor: Colors.red,));
             } else if (state is ProductDeletedState) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Product Deleted Successfully')));
-              Navigator.of(context).pushNamed('/');
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+                  content: const Text('Product Deleted Successfully'), backgroundColor: Theme.of(context).primaryColor,));
+              Navigator.of(context).pushNamed('/home');
             }
           },
           child: Column(

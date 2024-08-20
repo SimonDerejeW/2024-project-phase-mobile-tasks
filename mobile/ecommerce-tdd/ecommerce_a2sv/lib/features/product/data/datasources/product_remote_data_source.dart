@@ -7,6 +7,7 @@ import 'package:http_parser/http_parser.dart';
 
 import '../../../../core/constants/constants.dart';
 import '../../../../core/error/exception.dart';
+import '../../../../core/network/custom_client.dart';
 import '../models/product_model.dart';
 
 abstract class ProductRemoteDataSource {
@@ -18,13 +19,14 @@ abstract class ProductRemoteDataSource {
 }
 
 class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
-  final http.Client client;
+  // final http.Client client;
+  final CustomHttpClient client;
 
   ProductRemoteDataSourceImpl({required this.client});
 
   @override
   Future<ProductModel> createProduct(ProductModel product) async {
-    var uri = Uri.parse(Urls.baseUrl);
+    var uri = Uri.parse(Urls.baseUrl2);
     var request = http.MultipartRequest('POST', uri);
     // request.headers['Content-Type'] = 'multipart/form-data';
     request.fields['name'] = product.name;
@@ -44,15 +46,8 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
     }
 
     try {
-      // print(request.files.length);
-      print(request.fields);
 
-      http.StreamedResponse streamedResponse = await request.send();
-      // final responseString = await streamedResponse.stream.bytesToString();
-      // print(responseString);
-
-      print(streamedResponse.statusCode);
-      print(streamedResponse.reasonPhrase);
+      http.StreamedResponse streamedResponse = await client.send(request);
 
       if (streamedResponse.statusCode == 201) {
         final responseString = await streamedResponse.stream.bytesToString();
@@ -72,7 +67,7 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
   Future<void> deleteProduct(String id) async {
     try {
       final response =
-          await client.delete(Uri.parse(Urls.currentProductById(id)));
+          await client.delete(Urls.currentProductById(id));
       if (response.statusCode == 200) {
         return;
       } else {
@@ -86,7 +81,7 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
   @override
   Future<List<ProductModel>> getAllProducts() async {
     try {
-      final response = await client.get(Uri.parse(Urls.baseUrl));
+      final response = await client.get((Urls.baseUrl2));
       if (response.statusCode == 200) {
         // print(response.body);
         return ProductModel.fromJsonList(json.decode(response.body)['data']);
@@ -101,7 +96,7 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
   @override
   Future<ProductModel> getCurrentProduct(String id) async {
     try {
-      final response = await client.get(Uri.parse(Urls.currentProductById(id)));
+      final response = await client.get((Urls.currentProductById(id)));
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body)['data']);
       } else {
@@ -122,9 +117,9 @@ class ProductRemoteDataSourceImpl extends ProductRemoteDataSource {
     });
     try {
       final response = await client.put(
-          Uri.parse(Urls.currentProductById(productId)),
+          (Urls.currentProductById(productId)),
           body: jsonBody,
-          headers: {'Content-Type': 'application/json'});
+          );
       if (response.statusCode == 200) {
         return ProductModel.fromJson(json.decode(response.body)['data']);
       } else {

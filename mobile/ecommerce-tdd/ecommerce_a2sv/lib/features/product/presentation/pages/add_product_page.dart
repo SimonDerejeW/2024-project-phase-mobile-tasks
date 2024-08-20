@@ -102,20 +102,30 @@ class _AddProductPageState extends State<AddProductPage> {
         ),
         body: BlocListener<ProductBloc, ProductState>(
           listener: (context, state) {
+            if (!context.mounted) return;
             if (state is ProductCreatedState) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Product Created Successfully')));
-              Navigator.of(context).pushNamed('/');
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: const Text('Product Created Successfully'),
+                backgroundColor: Theme.of(context).primaryColor,
+              ));
+              Navigator.of(context).pushNamed('/home');
             } else if (state is ProductUpdatedState) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Product Updated Successfully')));
-              Navigator.of(context).pushNamed('/');
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: const Text('Product Updated Successfully'),
+                backgroundColor: Theme.of(context).primaryColor,
+              ));
+              Navigator.of(context).pushNamed('/home');
             } else if (state is ProductCreatedErrorState) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ));
             } else if (state is ProductUpdatedErrorState) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ));
             }
           },
           child: SingleChildScrollView(
