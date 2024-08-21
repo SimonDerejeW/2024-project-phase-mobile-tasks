@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             content: const Text('Logged out successfully'),
             backgroundColor: Theme.of(context).primaryColor,
           ));
-          Navigator.of(context).pushNamed('/login');
+          Navigator.pushNamedAndRemoveUntil(context, '/login', (Route<dynamic> route) => false,);
         }
       },
       child: Scaffold(

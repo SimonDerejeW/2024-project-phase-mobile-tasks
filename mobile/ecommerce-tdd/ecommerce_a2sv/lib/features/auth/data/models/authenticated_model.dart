@@ -1,6 +1,7 @@
 import '../../../../core/error/exception.dart';
 import '../../domain/entities/authenticated_entity.dart';
 
+
 class AuthenticatedModel extends AuthenticatedEntity{
   AuthenticatedModel({required super.token});
 
